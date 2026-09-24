@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  .hero-eyebrow { position: absolute; top: 173px; left: 163px; z-index: 4; }
+  .hero-title { position: absolute; top: 313px; left: 163px; width: 2200px; z-index: 4; }
+
+  .bg-wash-right { background: radial-gradient(55% 90% at 100% 40%, rgba(33,69,162,0.28) 0%, transparent 70%); }
+
+  /* ------------------------------------------------------------------
+     Geometry measured off the reference and scaled to 2560x1440
+     (its slide card was 1222x690, so x2.09).
+
+       upper block   left 163  top 531             bottom 1160
+       lower block             top 663  right 2394 bottom 1281
+
+     Composite box: 163,531 -> 2394,1281 = 2231 x 750.
+
+     The two blocks are linked by 50-degree DIAGONALS, not vertical
+     edges. In shape-local coordinates:
+       top link     (774, 0)   -> (885, 132)   run 111 over rise 132
+       bottom link  (711, 629) -> (813, 750)   run 102 over rise 121
+     Outer convex corners 40. The four diagonal junctions are filleted
+     with a tangent back-off of 18 (arc radius 39), which is what keeps
+     them visually much tighter than the outer corners.
+     ------------------------------------------------------------------ */
+  .cut-shape { left: 163px; top: 531px; width: 2231px; height: 750px; z-index: 2; }
+  .cut-fill { --glass-tint: 150, 178, 240; }
+
+  /* zone A -- inside the upper-left block */
+  .zone-a { left: 56px; top: 56px; width: 700px; }
+  .zone-a .intro { font-size: 28px; line-height: 1.55; color: var(--dark-heading); }
+  .zone-a .tag-grid { margin-top: 64px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px 20px; }
+  .zone-a .tag-grid span { font-size: 24px; font-weight: 500; color: var(--dark-body); }
+
+  /* zone B -- inside the lower-right block, clear of the upper one */
+  .zone-b { left: 857px; top: 196px; width: 1318px; height: 450px; }
+  .zone-b .cols { height: 100%; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .zone-b .cols > div { padding: 0 34px; border-right: 1px solid var(--dark-rule); display: flex; flex-direction: column; justify-content: space-between; }
+  .zone-b .cols > div:first-child { padding-left: 0; }
+  .zone-b .cols > div:last-child { border-right: none; padding-right: 0; }
+  .zone-b .col-label { font-size: 30px; font-weight: 600; }
+  .zone-b .col-body { font-size: 24px; line-height: 1.5; color: var(--dark-body); }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="bg-wash-right"></div>
+
+    <!-- The outline, declared once. The fill clips to it and the edge
+         strokes it, so the two cannot drift apart. Clockwise: convex
+         corners sweep 1, the two concave fillets sweep 0. -->
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <path id="cutPath" d="M 40 0
+          L 756 0          A 39 39 0 0 1 785.6 13.8
+          L 873.4 118.2    A 39 39 0 0 0 903 132
+          L 2191 132       A 40 40 0 0 1 2231 172
+          L 2231 710       A 40 40 0 0 1 2191 750
+          L 831 750        A 39 39 0 0 1 801.4 736.2
+          L 722.6 642.8    A 39 39 0 0 0 693 629
+          L 40 629         A 40 40 0 0 1 0 589
+          L 0 40           A 40 40 0 0 1 40 0 Z"/>
+        <clipPath id="cutClip" clipPathUnits="userSpaceOnUse"><use href="#cutPath"/></clipPath>
+        <linearGradient id="glassEdge" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%"   stop-color="#fff" stop-opacity="0.92"/>
+          <stop offset="16%"  stop-color="#fff" stop-opacity="0.16"/>
+          <stop offset="38%"  stop-color="#fff" stop-opacity="0.64"/>
+          <stop offset="58%"  stop-color="#fff" stop-opacity="0.10"/>
+          <stop offset="80%"  stop-color="#fff" stop-opacity="0.80"/>
+          <stop offset="100%" stop-color="#fff" stop-opacity="0.22"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <div class="frame-tag" data-overlay="gc-tag">Example layout</div>
+
+    <div class="hero-eyebrow">
+      <div class="eyebrow" data-overlay="gc-eyebrow">Example layout</div>
+    </div>
+
+    <div class="hero-title">
+      <div class="title xl" data-overlay="gc-title">A worked stepped glass shape</div>
+    </div>
+
+    <div class="cut-shape">
+      <!-- the second sheet, behind and below -->
+      <div class="cut-ghost">
+        <div class="cut-fill" style="clip-path: url(#cutClip);"></div>
+        <svg class="cut-edge" viewBox="0 0 2231 750"><use href="#cutPath"/></svg>
+      </div>
+
+      <div class="cut-fill" style="clip-path: url(#cutClip);"></div>
+      <svg class="cut-edge" viewBox="0 0 2231 750"><use href="#cutPath"/></svg>
+
+      <div class="cut-zone zone-a">
+        <div class="intro">
+          One continuous outline, the two blocks linked on a pair of
+          diagonals, with a second sheet stacked behind and below it.
+        </div>
+        <div class="tag-grid">
+          <span>Openers</span>
+          <span>Section breaks</span>
+          <span>Comparisons</span>
+          <span>Summaries</span>
+          <span>Data panels</span>
+          <span>Closers</span>
+          <span>Roadmaps</span>
+          <span>Architecture</span>
+          <span>Team pages</span>
+        </div>
+      </div>
+
+      <div class="cut-zone zone-b">
+        <div class="cols">
+          <div>
+            <div class="col-label">One shape</div>
+            <div class="col-body">Not two rectangles overlapping. Trace the outline and it closes as one path.</div>
+          </div>
+          <div>
+            <div class="col-label">Angled links</div>
+            <div class="col-body">The blocks join on 50 degree diagonals, filleted far tighter than the outer corners.</div>
+          </div>
+          <div>
+            <div class="col-label">Light at the base</div>
+            <div class="col-body">One ramp down the whole composite, dark at the top and lifting toward the bottom.</div>
+          </div>
+          <div>
+            <div class="col-label">An SVG edge</div>
+            <div class="col-body">A masked ring follows a radius, not a clip path, so the arcs need a stroke.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  .hero { position: absolute; top: 130px; left: 64px; width: 900px; }
+  .hero .title { margin-bottom: 16px; }
+
+  .lens-field { top: 240px; left: 1560px; width: 860px; height: 700px; }
+
+  .list-panel { position: absolute; top: 620px; left: 64px; width: 1200px; }
+  .list-panel .divider-item { display: flex; justify-content: space-between; align-items: baseline; }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="bg-wash-right"></div>
+    <div class="frame-logo" data-overlay="gp-logo">Acme</div>
+    <div class="frame-tag" data-overlay="gp-tag">Example layout</div>
+
+    <div class="hero">
+      <div class="eyebrow" data-overlay="gp-eyebrow">Example layout</div>
+      <div class="title" data-overlay="gp-title">A worked glass-panel slide</div>
+      <div class="subtitle dark" data-overlay="gp-subtitle">
+        Frosted glass panels and tinted lens discs with a specular highlight --
+        a second, more atmospheric surface language alongside the opaque card
+        system. Tint discs grey to teal to blue rather than painting one hue.
+      </div>
+    </div>
+
+    <div class="lens-field">
+      <div class="lens-axis"></div>
+
+      <div class="glass-lens" style="--lw: 319px; --lh: 700px; --lc: 150,158,170; --la: 0.05; left: 0;">
+        <div class="lens-side"></div><div class="lens-face"></div>
+      </div>
+      <div class="glass-lens" style="--lw: 283px; --lh: 620px; --lc: 172,180,192; --la: 0.09; left: 190px;">
+        <div class="lens-side"></div><div class="lens-face"></div>
+      </div>
+      <div class="glass-lens" style="--lw: 246px; --lh: 540px; --lc: 143,217,196; --la: 0.20; left: 365px;">
+        <div class="lens-side"></div><div class="lens-face"></div>
+      </div>
+      <div class="glass-lens" style="--lw: 214px; --lh: 470px; --lc: 159,190,240; --la: 0.22; left: 525px;">
+        <div class="lens-side"></div><div class="lens-face"></div>
+      </div>
+    </div>
+
+    <div class="list-panel divider-list">
+      <div class="divider-item">
+        <span class="card-title" style="margin:0; font-size:26px;" data-overlay="gp-i1-label">Decoherence</span>
+        <span class="card-body dark" style="max-width:700px; text-align:right;" data-overlay="gp-i1-body">Qubits lose information quickly from environmental interference.</span>
+      </div>
+      <div class="divider-item">
+        <span class="card-title" style="margin:0; font-size:26px;" data-overlay="gp-i2-label">Qubit stability</span>
+        <span class="card-body dark" style="max-width:700px; text-align:right;" data-overlay="gp-i2-body">Maintaining quantum states requires extreme precision.</span>
+      </div>
+      <div class="divider-item">
+        <span class="card-title" style="margin:0; font-size:26px;" data-overlay="gp-i3-label">Scalability</span>
+        <span class="card-body dark" style="max-width:700px; text-align:right;" data-overlay="gp-i3-body">Expanding processors without adding noise is difficult.</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

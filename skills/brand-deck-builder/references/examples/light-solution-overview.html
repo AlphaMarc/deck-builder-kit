@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  .header-centered { position: absolute; top: 130px; left: 0; width: 100%; text-align: center; }
+  .header-centered .title { margin-bottom: 16px; }
+  .header-centered .subtitle { max-width: 900px; margin: 0 auto; text-align: center; }
+
+  /* bento A proportions: left region 1110 : right card 1100, near 1:1 */
+  .grid-zone { position: absolute; top: 434px; left: 164px; width: 2240px; height: 896px; display: grid; grid-template-columns: 1fr 1fr 2.037fr; grid-template-rows: 1fr 1fr; gap: 30px; }
+  .stat-card { display: flex; flex-direction: column; }
+  .stat-card .stat-row { flex: 1; display: flex; align-items: flex-end; justify-content: flex-end; }
+
+  .monitor-card { grid-column: 1 / 3; display: flex; flex-direction: column; }
+  .monitor-card .chart-zone { flex: 1; position: relative; margin-top: 16px; }
+  .ontrack-pill { position: absolute; top: 10px; left: 46%; }
+
+  .venn-card { grid-column: 3; grid-row: 1 / 3; position: relative; overflow: hidden; }
+  .venn-circle { position: absolute; width: 300px; height: 300px; border-radius: 50%; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 40px; }
+  .venn-circle.before { left: 90px; top: 190px; background: radial-gradient(circle at 35% 30%, var(--accent-100), var(--accent-300)); }
+  .venn-circle.after { left: 300px; top: 190px; background: radial-gradient(circle at 35% 30%, var(--accent-500), var(--accent-700)); box-shadow: 0 20px 40px -12px var(--accent-glow); }
+  .venn-caption { position: absolute; top: 520px; text-align: center; font-size: 20px; line-height: 1.45; color: var(--light-body); width: 260px; }
+  .venn-caption.before { left: 10px; }
+  .venn-caption.after { left: 300px; }
+  .workflows-tag { position: absolute; bottom: 24px; right: 24px; }
+</style>
+</head>
+<body>
+  <div class="slide light">
+    <div class="frame-logo" data-overlay="so-logo">Nexthink</div>
+
+    <div class="header-centered">
+      <div class="title" data-overlay="so-title">Solution overview</div>
+      <div class="subtitle light" data-overlay="so-subtitle">
+        A worked example of the centered-header bento layout: two small stat cards, one wide chart
+        card, and a tall card spanning both rows on the right for the diagram.
+      </div>
+    </div>
+
+    <div class="grid-zone">
+      <div class="card light stat-card">
+        <div class="card-title" data-overlay="so-c1-title">Workflow builder</div>
+        <div class="card-body light" data-overlay="so-c1-body">Drag-and-drop logic across triggers, conditions, and actions.</div>
+        <div class="stat-row"><div class="stat accent" data-overlay="so-c1-stat">50%</div></div>
+      </div>
+      <div class="card light stat-card">
+        <div class="card-title" data-overlay="so-c2-title">AI decision layer</div>
+        <div class="card-body light" data-overlay="so-c2-body">Classify, route, and recommend the next best action.</div>
+        <div class="stat-row"><div class="stat accent" data-overlay="so-c2-stat">30%</div></div>
+      </div>
+
+      <div class="card light monitor-card">
+        <div class="card-title" data-overlay="so-c3-title">Execution monitoring</div>
+        <div class="card-body light" data-overlay="so-c3-body">Track workflow health, errors, and delays in real time.</div>
+        <div class="chart-zone">
+          <span class="pill neutral-light ontrack-pill"><span data-overlay="so-c3-pill">On track</span></span>
+          <svg viewBox="0 0 500 160" width="100%" height="100%" preserveAspectRatio="none" style="position:absolute; inset:0;">
+            <defs>
+              <linearGradient id="lineFade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3E64C8" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#3E64C8" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,140 L120,140 L200,60 L320,60 L400,20 L500,20 L500,160 L0,160 Z" fill="url(#lineFade)"/>
+            <path d="M0,140 L120,140 L200,60 L320,60 L400,20 L500,20" fill="none" stroke="#3E64C8" stroke-width="4" stroke-linejoin="round"/>
+            <circle cx="120" cy="140" r="6" fill="#3E64C8"/>
+            <circle cx="320" cy="60" r="6" fill="#3E64C8"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card light venn-card">
+        <div class="card-title" data-overlay="so-c4-title" style="position: relative; z-index: 2;">Before vs after</div>
+        <div class="orbit-ring accent" style="width: 560px; height: 560px; top: 60px; left: 50px;"></div>
+        <div class="venn-circle before">
+          <span class="pill accent"><span data-overlay="so-before-pill">Before</span></span>
+        </div>
+        <div class="venn-circle after">
+          <span class="pill neutral-light"><span data-overlay="so-after-pill">After</span></span>
+        </div>
+        <div class="venn-caption before" data-overlay="so-before-caption">Fragmented tools, manual follow-up</div>
+        <div class="venn-caption after" data-overlay="so-after-caption">Automated execution, faster resolution</div>
+        <span class="pill neutral-light workflows-tag"><span data-overlay="so-workflows-tag">Workflows</span></span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

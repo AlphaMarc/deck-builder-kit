@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  .hero { position: absolute; top: 140px; left: 64px; width: 560px; }
+  .hero .title { margin-bottom: 16px; }
+
+  .steps { position: absolute; top: 200px; left: 1180px; width: 1300px; }
+  .step-row { display: flex; gap: 32px; align-items: flex-start; }
+  .step-row .col-a { display: flex; flex-direction: column; align-items: center; width: 64px; }
+  .step-connector-wrap { height: 56px; display: flex; }
+  .step-body { padding-top: 4px; padding-bottom: 40px; }
+  .step-body .card-title { margin-bottom: 6px; }
+
+  .glow-steps { width: 700px; height: 700px; top: 380px; left: 1550px; }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="frame-logo" data-overlay="ex4-logo">Acme</div>
+    <div class="frame-tag" data-overlay="ex4-tag">What changed</div>
+
+    <div class="glow glow-steps accent"></div>
+
+    <div class="hero">
+      <div class="eyebrow" data-overlay="ex4-eyebrow">Example layout</div>
+      <div class="title" data-overlay="ex4-title">A worked step-list slide</div>
+      <div class="subtitle dark" data-overlay="ex4-subtitle">
+        Glossy connected circles instead of flat numbered dots -- the
+        connector line is what makes four separate facts read as one
+        sequence.
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step-row">
+        <div class="col-a">
+          <div class="step-circle" data-overlay="ex4-n1">01</div>
+          <div class="step-connector-wrap"><div class="step-connector"></div></div>
+        </div>
+        <div class="step-body">
+          <div class="card-title" data-overlay="ex4-t1">First change</div>
+          <div class="card-body dark" data-overlay="ex4-b1" style="max-width: 900px;">Short supporting sentence for step one.</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="col-a">
+          <div class="step-circle" data-overlay="ex4-n2">02</div>
+          <div class="step-connector-wrap"><div class="step-connector"></div></div>
+        </div>
+        <div class="step-body">
+          <div class="card-title" data-overlay="ex4-t2">Second change</div>
+          <div class="card-body dark" data-overlay="ex4-b2" style="max-width: 900px;">Short supporting sentence for step two.</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="col-a">
+          <div class="step-circle" data-overlay="ex4-n3">03</div>
+        </div>
+        <div class="step-body" style="padding-bottom: 0;">
+          <div class="card-title" data-overlay="ex4-t3">Third change</div>
+          <div class="card-body dark" data-overlay="ex4-b3" style="max-width: 900px;">Short supporting sentence for step three -- last one in the sequence gets no connector below it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

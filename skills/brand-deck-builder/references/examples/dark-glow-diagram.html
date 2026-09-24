@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  .glow-behind { width: 900px; height: 900px; top: 260px; left: 1350px; }
+
+  .hero { position: absolute; top: 620px; left: 64px; width: 560px; }
+  .hero .title { margin-bottom: 20px; }
+
+  .venn { position: absolute; top: 380px; left: 1420px; width: 900px; height: 640px; z-index: 1; }
+  .circle { position: absolute; border-radius: 50%; width: 460px; height: 460px; top: 90px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 60px; }
+  .circle.before { left: 40px; background: rgba(255,255,255,0.06); border: 1px solid var(--dark-border); }
+  .circle.after { left: 400px; background: linear-gradient(160deg, var(--accent-500), var(--accent-900)); }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="frame-logo" data-overlay="ex2-logo">Acme</div>
+    <div class="frame-tag" data-overlay="ex2-tag">March 202X</div>
+
+    <div class="glow glow-behind accent"></div>
+
+    <div class="hero">
+      <div class="eyebrow" data-overlay="ex2-eyebrow">Example layout</div>
+      <div class="title" data-overlay="ex2-title">A worked glow + diagram slide</div>
+      <div class="subtitle dark" data-overlay="ex2-subtitle">
+        One large blurred glow sits behind the shape cluster, not behind
+        the text. The accent gradient marks only the "after" side --
+        everything else stays neutral.
+      </div>
+    </div>
+
+    <div class="venn">
+      <div class="circle before">
+        <span class="pill neutral-dark"><span data-overlay="ex2-before-pill">Before</span></span>
+      </div>
+      <div class="circle after">
+        <span class="pill accent"><span data-overlay="ex2-after-pill">After</span></span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

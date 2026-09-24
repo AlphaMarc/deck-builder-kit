@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  /* Stat rail, four numbers, light.
+
+     Every vertical value comes from the reference proportions in
+     deck-system.css's .stat-rail comment. Only two are set locally,
+     because only two are not already in the class:
+
+       claim cap top  12.6% of 1440 = 182  ->  box top 157 at .title.xl
+       rule top       52.0% of 1440 = 748
+
+     The claim sits HIGHER than the reference's 16.3%, and that is a
+     correction rather than a liberty. Our claim is light-300 type, which
+     has to run larger than the reference's bold to hold the same
+     presence, so at .title.xl its two lines make 270px of ink where the
+     reference makes 207. Left at 16.3% that surplus eats the white band
+     between the claim and the rail, which came out at 17.5% against the
+     reference's 20.8% -- and that band is the whole rhythm of the slide.
+     Raising the claim by 45px puts the band back at 20.6% and still
+     leaves more clear space above the type than the reference has. The
+     alternative, dropping to .title at 90px, restores the band exactly
+     but leaves the claim filling only 60% of the content width, so the
+     top of the slide goes light while the number row stays heavy.
+
+     The claim and the leftmost column share one left edge at 160px, and
+     the rightmost column ends on the mirror of it. Nothing else on the
+     slide is allowed a different left edge. */
+  .claim { position: absolute; top: 157px; left: 160px; width: 2240px; z-index: 2; }
+</style>
+</head>
+<body>
+  <div class="slide light">
+    <div class="frame-logo">Nexthink</div>
+    <div class="frame-tag">Example layout</div>
+
+    <div class="claim">
+      <div class="title xl">Your own documents return more<br>than any data you buy.</div>
+    </div>
+
+    <div class="stat-rail" style="top:748px;">
+      <div class="rail-col">
+        <div class="rail-label">Annual savings</div>
+        <div class="stat xl">$1.2M</div>
+      </div>
+      <div class="rail-col">
+        <div class="rail-label">Return on investment</div>
+        <div class="stat xl">3.6<span class="stat-accent-part">x</span></div>
+      </div>
+      <div class="rail-col">
+        <div class="rail-label">Time saved on workflows</div>
+        <div class="stat xl">80%</div>
+      </div>
+      <div class="rail-col">
+        <div class="rail-label">Payback period</div>
+        <div class="stat xl">&lt;6 mo</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

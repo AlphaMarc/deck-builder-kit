@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="deck-system.css">
+<style>
+  /* Share split, three shares, dark.
+
+     Same proportions as the two-share version. The second share takes the
+     MIDDLE number slot and --teal-*, which is the documented job of the
+     second hue: three values of one blue are far harder to separate at a
+     glance than blue / teal / grey.
+
+     The centre number is centred on the CANVAS, not over its own run of
+     circles (which for 54/31/15 would sit at about 70% across). Three
+     numbers reading left / centre / right is worth more than that
+     alignment, and it does not move when the data does. */
+  .num-left   { position: absolute; top: 312px; left: 160px;  z-index: 2; }
+  .num-mid    { position: absolute; top: 312px; left: 0; right: 0; text-align: center; z-index: 2; }
+  .num-right  { position: absolute; top: 312px; right: 160px; text-align: right; z-index: 2; }
+  .note-left  { position: absolute; top: 574px; left: 160px;  width: 660px; z-index: 2; }
+  .note-mid   { position: absolute; top: 574px; left: 950px;  width: 660px; text-align: center; z-index: 2; }
+  .note-right { position: absolute; top: 574px; right: 160px; width: 660px; text-align: right; z-index: 2; }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="frame-logo" data-overlay="s6-logo">Nexthink</div>
+    <div class="frame-tag" data-overlay="s6-tag">Query mix</div>
+
+    <div class="num-left"><div class="share-num" data-overlay="s6-v1">54%</div></div>
+    <div class="note-left">
+      <div class="share-note" data-overlay="s6-n1">
+        A lookup against a single table<br>comes back in under a second.
+      </div>
+    </div>
+
+    <div class="num-mid"><div class="share-num second" data-overlay="s6-v2">31%</div></div>
+    <div class="note-mid">
+      <div class="share-note" data-overlay="s6-n2">
+        A join across two or three tables<br>costs about four seconds.
+      </div>
+    </div>
+
+    <div class="num-right"><div class="share-num rest" data-overlay="s6-v3">15%</div></div>
+    <div class="note-right">
+      <div class="share-note rest" data-overlay="s6-n3">
+        Window functions and nested aggregation<br>need a planner rewrite.
+      </div>
+    </div>
+
+    <div class="unit-field" style="left:160px; top:748px; width:2240px; height:555px;">
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit second"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+    </div>
+  </div>
+</body>
+</html>

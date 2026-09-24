@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="deck-system.css">
+<style>
+  /* Stat rail, three numbers, dark.
+
+     Nothing about the rail changes for three columns. The rail is anchored
+     right and the column width is fixed, so dropping one column removes it
+     FROM THE LEFT: the remaining three keep the exact x positions they had
+     with four, and the vacated 560px becomes breathing room under the
+     claim. Compare the two slides at full width and the last three rules
+     land on the same pixels.
+
+     The claim keeps the same left edge and the same cap top as the
+     four-column version, because the rail is what moved, not the claim. */
+  .claim { position: absolute; top: 157px; left: 160px; width: 2240px; z-index: 2; }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="frame-logo" data-overlay="s4-logo">Nexthink</div>
+    <div class="frame-tag" data-overlay="s4-tag">Adoption</div>
+
+    <div class="claim">
+      <div class="title xl" data-overlay="s4-claim">The index has become how<br>people look things up.</div>
+    </div>
+
+    <div class="stat-rail" style="top:748px;">
+      <div class="rail-col on-dark">
+        <div class="rail-label on-dark" data-overlay="s4-l1">Questions answered</div>
+        <div class="stat xl" data-overlay="s4-v1">41k</div>
+      </div>
+      <div class="rail-col on-dark">
+        <div class="rail-label on-dark" data-overlay="s4-l2">Answers people kept</div>
+        <div class="stat xl" data-overlay="s4-v2">92%</div>
+      </div>
+      <div class="rail-col on-dark">
+        <div class="rail-label on-dark" data-overlay="s4-l3">Median time to answer</div>
+        <div class="stat xl" data-overlay="s4-v3">4.1<span class="stat-accent-part">s</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

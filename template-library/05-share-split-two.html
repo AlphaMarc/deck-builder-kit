@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="deck-system.css">
+<style>
+  /* Share split, two shares, dark.
+
+     Vertical values are the reference proportions (see the .share-split
+     comment in deck-system.css). Only the three block tops are local:
+
+       big number digit top  23.9% of 1440 = 345  ->  box top 312
+       note cap top          40.6% of 1440 = 585  ->  box top 574
+       field top             52.0% of 1440 = 748
+
+     The field top is deliberately the SAME 52% line the stat rail starts
+     its hairlines on, so a deck that uses both layouts has one shared
+     horizon rather than two nearly-equal ones. */
+  .num-left  { position: absolute; top: 312px; left: 160px;  z-index: 2; }
+  .num-right { position: absolute; top: 312px; right: 160px; text-align: right; z-index: 2; }
+  .note-left  { position: absolute; top: 574px; left: 160px;  width: 660px; z-index: 2; }
+  .note-right { position: absolute; top: 574px; right: 160px; width: 660px; text-align: right; z-index: 2; }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="frame-logo" data-overlay="s5-logo">Nexthink</div>
+    <div class="frame-tag" data-overlay="s5-tag">Executability</div>
+
+    <div class="num-left"><div class="share-num" data-overlay="s5-v1">69%</div></div>
+    <div class="note-left">
+      <div class="share-note" data-overlay="s5-n1">
+        Queries that run first time, with no edit<br>from the person who asked.
+      </div>
+    </div>
+
+    <div class="num-right"><div class="share-num rest" data-overlay="s5-v2">31%</div></div>
+    <div class="note-right">
+      <div class="share-note rest" data-overlay="s5-n2">
+        The remainder needs a hand-written fix<br>before it returns a row.
+      </div>
+    </div>
+
+    <div class="unit-field" style="left:160px; top:748px; width:2240px; height:555px;">
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit filled"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+      <div class="unit rest"></div>
+    </div>
+  </div>
+</body>
+</html>

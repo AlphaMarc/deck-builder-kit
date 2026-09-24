@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  .hero { position: absolute; top: 240px; left: 96px; width: 1240px; z-index: 4; }
+  .hero .title { margin-bottom: 18px; }
+
+  .note { position: absolute; top: 830px; left: 96px; width: 620px; z-index: 4; }
+
+  .process-chain { top: 540px; left: 830px; width: 1510px; height: 680px; z-index: 1; }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="frame-logo" data-overlay="pc-logo">Nexthink</div>
+    <div class="frame-tag" data-overlay="pc-tag">Q3 2026</div>
+
+    <div class="hero">
+      <div class="eyebrow" data-overlay="pc-eyebrow">Example layout</div>
+      <div class="title" data-overlay="pc-title">Product workflow</div>
+      <div class="subtitle dark" data-overlay="pc-subtitle" style="max-width: 880px;">
+        Three circles growing left to right, stacked from the left so the
+        first step sits on top and the last one blurs away behind them.
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="card-body dark" data-overlay="pc-note">
+        From idea to live workflow in under thirty minutes for a standard
+        use case.
+      </div>
+    </div>
+
+    <!-- back to front: step 3 first, so the leftmost circle paints on top -->
+    <div class="process-chain">
+      <div class="process-step" style="--d: 680px; left: 830px; top: 0; z-index: 1;">
+        <div class="step-fill soft"></div>
+        <div class="step-text">
+          <div class="step-label" data-overlay="pc-s3-title">Step 3 &middot; Optimise</div>
+          <ul class="step-bullets">
+            <li><span data-overlay="pc-s3-b1">Track success and failure rates</span></li>
+            <li><span data-overlay="pc-s3-b2">Review the run history</span></li>
+            <li><span data-overlay="pc-s3-b3">Fix the steps causing friction</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="process-step" style="--d: 540px; left: 360px; top: 70px; z-index: 2;">
+        <div class="step-fill accent"></div>
+        <div class="step-text">
+          <div class="step-label" data-overlay="pc-s2-title">Step 2 &middot; Launch</div>
+          <ul class="step-bullets">
+            <li><span data-overlay="pc-s2-b1">Test the logic end to end</span></li>
+            <li><span data-overlay="pc-s2-b2">Publish the workflow</span></li>
+            <li><span data-overlay="pc-s2-b3">Assign ownership and alerts</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="process-step" style="--d: 420px; left: 0; top: 130px; z-index: 3;">
+        <div class="step-fill light"></div>
+        <div class="step-text on-light">
+          <div class="step-label" data-overlay="pc-s1-title">Step 1 &middot; Build</div>
+          <ul class="step-bullets" style="color: var(--light-body);">
+            <li><span data-overlay="pc-s1-b1">Add conditions and actions</span></li>
+            <li><span data-overlay="pc-s1-b2">Configure the decision node</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

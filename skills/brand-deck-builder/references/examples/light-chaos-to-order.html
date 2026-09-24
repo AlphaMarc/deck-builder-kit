@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  /* Statement frame + scatter-to-order, light.
+
+     Only coordinates are local. The composition classes (.corner-note,
+     .hero-statement) and the diagram classes (.scatter-field, .dot,
+     .flow-arrow, .order-grid) are in deck-system.css.
+
+     All three zones share one horizontal centre line at y=668, which is
+     what keeps the middle band reading as a single object. */
+  .glow-order { left: 1330px; top: 128px; width: 1080px; height: 1080px; opacity: 0.16; }
+</style>
+</head>
+<body>
+  <div class="slide light">
+    <div class="glow accent glow-order"></div>
+
+    <div class="frame-logo">Nexthink</div>
+    <div class="frame-tag">Example layout</div>
+
+    <div class="corner-note">
+      <div class="subtitle light">
+        PDFs, screenshots, chat threads and spreadsheets make up most of
+        what your company has written down.
+      </div>
+    </div>
+
+    <div class="scatter-field" style="left:340px; top:420px; width:623px; height:497px;">
+      <div class="dot chaos" style="left:19px;  top:100px;"></div>
+      <div class="dot chaos" style="left:199px; top:18px;"></div>
+      <div class="dot chaos" style="left:300px; top:125px;"></div>
+      <div class="dot chaos" style="left:417px; top:102px;"></div>
+      <div class="dot chaos" style="left:154px; top:225px;"></div>
+      <div class="dot chaos" style="left:268px; top:259px;"></div>
+      <div class="dot chaos" style="left:409px; top:287px;"></div>
+      <div class="dot chaos" style="left:42px;  top:353px;"></div>
+      <div class="dot chaos" style="left:201px; top:411px;"></div>
+      <div class="dot chaos" style="left:537px; top:329px;"></div>
+    </div>
+
+    <svg class="flow-arrow" style="left:1090px; top:645px;" width="450" height="46" viewBox="0 0 450 46">
+      <path d="M0 23 H 428"/>
+      <path d="M414 10 L 436 23 L 414 36"/>
+    </svg>
+
+    <div class="order-grid" style="left:1690px; top:488px;">
+      <div class="dot ordered"></div>
+      <div class="dot ordered"></div>
+      <div class="dot ordered"></div>
+      <div class="dot ordered"></div>
+      <div class="dot ordered"></div>
+      <div class="dot ordered"></div>
+      <div class="dot ordered"></div>
+      <div class="dot ordered"></div>
+      <div class="dot ordered"></div>
+    </div>
+
+    <div class="hero-statement">
+      <div class="title xl">Nobody can read the answers<br>already in your files.</div>
+    </div>
+  </div>
+</body>
+</html>

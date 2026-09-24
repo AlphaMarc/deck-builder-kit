@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  .hero { position: absolute; top: 130px; left: 64px; width: 700px; }
+  .hero .title { margin-bottom: 16px; }
+
+  .legend { position: absolute; top: 500px; left: 64px; width: 700px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .legend-item { border-radius: var(--radius-md); padding: 24px; border: 1px solid var(--dark-border); }
+  .legend-item.active { background: linear-gradient(135deg, var(--accent-500), var(--accent-700)); border-color: transparent; }
+  .legend-item .pill { margin-bottom: 14px; }
+  .legend-item p { font-size: 22px; line-height: 1.5; color: var(--dark-body); }
+  .legend-item.active p { color: rgba(255,255,255,0.85); }
+
+  .funnel-zone { position: absolute; top: 90px; left: 1050px; width: 1400px; display: flex; flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="frame-logo" data-overlay="fn-logo">Nexthink</div>
+    <div class="frame-tag" data-overlay="fn-tag">Go-to-market</div>
+
+    <div class="hero">
+      <div class="eyebrow" data-overlay="fn-eyebrow">Example layout</div>
+      <div class="title" data-overlay="fn-title">A worked 3D-funnel slide</div>
+      <div class="subtitle dark" data-overlay="fn-subtitle">
+        Four stacked ellipses, each lit from the top and shadowed at the
+        base -- that's what makes them read as physical discs instead of
+        flat gradient ovals.
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item active">
+        <span class="pill neutral-light"><span data-overlay="fn-l1-label">Leads</span></span>
+        <p data-overlay="fn-l1-body">Acquire via an operational pain-point use case.</p>
+      </div>
+      <div class="legend-item">
+        <span class="pill neutral-dark"><span data-overlay="fn-l2-label">Qualified</span></span>
+        <p data-overlay="fn-l2-body">Prove ROI in one workflow category.</p>
+      </div>
+      <div class="legend-item">
+        <span class="pill neutral-dark"><span data-overlay="fn-l3-label">Trials</span></span>
+        <p data-overlay="fn-l3-body">Expand to adjacent departments.</p>
+      </div>
+      <div class="legend-item">
+        <span class="pill neutral-dark"><span data-overlay="fn-l4-label">Customers</span></span>
+        <p data-overlay="fn-l4-body">Convert to an annual multi-team contract.</p>
+      </div>
+    </div>
+
+    <div class="funnel-zone">
+      <div class="funnel">
+        <div class="funnel-stage" style="width: 900px; height: 220px;">
+          <span class="pill neutral-light pill-badge"><span data-overlay="fn-s1-label">Leads</span><span class="pill-badge-value"><span data-overlay="fn-s1-value">1000</span></span></span>
+        </div>
+        <div class="funnel-stage" style="width: 760px; height: 190px; margin-top: -66px;">
+          <span class="pill neutral-light pill-badge"><span data-overlay="fn-s2-label">Qualified</span><span class="pill-badge-value"><span data-overlay="fn-s2-value">120</span></span></span>
+        </div>
+        <div class="funnel-stage" style="width: 620px; height: 160px; margin-top: -56px;">
+          <span class="pill neutral-light pill-badge"><span data-overlay="fn-s3-label">Trials</span><span class="pill-badge-value"><span data-overlay="fn-s3-value">32</span></span></span>
+        </div>
+        <div class="funnel-stage" style="width: 480px; height: 130px; margin-top: -46px;">
+          <span class="pill neutral-light pill-badge"><span data-overlay="fn-s4-label">Customers</span><span class="pill-badge-value"><span data-overlay="fn-s4-value">11</span></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

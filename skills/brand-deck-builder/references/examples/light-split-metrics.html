@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  /* Slide-specific layout only -- everything else comes from deck-system.css */
+  .hero { position: absolute; top: 220px; left: 64px; width: 620px; }
+  .hero .eyebrow { margin-bottom: 20px; }
+  .hero .title { margin-bottom: 20px; }
+
+  .grid-zone { position: absolute; top: 220px; left: 780px; width: 1716px; height: 900px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 28px; }
+  .grid-zone .card:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .grid-zone .card:nth-child(2) { grid-column: 1; grid-row: 2; }
+  .grid-zone .card:nth-child(3) { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; justify-content: center; }
+</style>
+</head>
+<body>
+  <div class="slide light">
+    <div class="frame-logo" data-overlay="ex1-logo">Acme</div>
+
+    <div class="hero">
+      <div class="eyebrow" data-overlay="ex1-eyebrow">Example layout</div>
+      <div class="title" data-overlay="ex1-title">Renewals, simplified</div>
+      <div class="subtitle light" data-overlay="ex1-subtitle">
+        A worked example of the split layout: a hero block on one side, an
+        asymmetric card grid on the other. Swap this copy and the grid
+        contents for whatever the real slide needs.
+      </div>
+    </div>
+
+    <div class="grid-zone">
+      <div class="card light">
+        <div class="card-title" data-overlay="ex1-c1-title">Time to renew</div>
+        <div class="card-body light" data-overlay="ex1-c1-body">Median days from quote to signed renewal.</div>
+        <div class="stat accent" data-overlay="ex1-c1-stat" style="margin-top:24px;">4.6</div>
+      </div>
+      <div class="card light">
+        <div class="card-title" data-overlay="ex1-c2-title">Auto-renew rate</div>
+        <div class="card-body light" data-overlay="ex1-c2-body">Accounts that renew without manual touch.</div>
+        <div class="stat accent" data-overlay="ex1-c2-stat" style="margin-top:24px;">61%</div>
+      </div>
+      <div class="card light">
+        <div class="card-title" data-overlay="ex1-c3-title">Net revenue retention</div>
+        <div class="card-body light" data-overlay="ex1-c3-body" style="max-width:520px;">
+          The big spanning card is the visual anchor of the grid -- use it
+          for the single most important number or the richest supporting
+          detail, not just whatever's left over.
+        </div>
+        <div class="stat accent xl" data-overlay="ex1-c3-stat" style="margin-top:32px;">112%</div>
+        <div class="stat-label" data-overlay="ex1-c3-stat-label">trailing 12 months</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

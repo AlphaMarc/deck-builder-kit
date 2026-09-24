@@ -1,0 +1,1662 @@
+/*
+  Shared visual system for brand-deck-builder slides.
+  Copy this file next to your slide .html files and <link> it — don't
+  reinvent these tokens per slide, and don't inline duplicate copies of it.
+
+  Swap the --accent-* values to re-skin the whole deck for a different
+  brand; everything else (type scale, spacing, glow technique, card system)
+  is brand-agnostic.
+*/
+
+:root {
+  /* Nexthink blue, given as the brand accent (rgb 33,69,162) */
+  --accent-900: #0F2050;
+  --accent-700: #16337D;
+  --accent-600: #2145A2; /* base */
+  --accent-500: #3E64C8;
+  --accent-400: #6E8AD6;
+  --accent-300: #9FB3E6;
+  --accent-100: #E8EDFA;
+  --accent-glow: rgba(33, 69, 162, 0.55);
+
+  /* Secondary teal -- an optional second hue for the light-blue/green/grey
+     "glass" palette. Pair sparingly with the primary blue (e.g. one tinted
+     glass disc in teal among otherwise blue/grey ones) -- it's a second
+     accent, not a replacement for --accent-*. */
+  --teal-700: #1F5C4E;
+  --teal-500: #3FA88F;
+  --teal-300: #8FD9C4;
+  --teal-glow: rgba(63, 168, 143, 0.5);
+
+  /* Highlighted-bar ramp: a muted yellow-green falling through green to a
+     pale base. Deliberately desaturated -- a saturated bar reads as a
+     default chart colour rather than as a lit object. */
+  --bar-lit-top:  #A9BC8F;
+  --bar-lit-mid:  #8FB6A5;
+  --bar-lit-base: #CBD2CC;
+
+  /* ORB RAMPS -- the fill for any filled circle (unit fields, ordered
+     dots). Three stops inside a NARROW range, because the job here is
+     material texture, not a light-to-dark sweep: three colours close
+     enough that no boundary between them is visible give a disc an
+     internal life that two stops cannot, while a wide ramp just makes a
+     circle look like it is fading out.
+
+     The blue deliberately does NOT use --accent-400/500. Those are the
+     brand accent's mid tones and at circle scale they read as stock
+     office blue -- the default chart fill in every deck ever made. This
+     ramp sits a step deeper and slightly less saturated, which reads as a
+     considered material rather than a swatch. */
+  --orb-blue-1: #3A5AA8;
+  --orb-blue-2: #2E4A8C;
+  --orb-blue-3: #243B72;
+  /* A sphere's lit point runs brighter than a side-lit disc's, so the
+     radial variant gets its own top stop. */
+  --orb-blue-lit:    #4A6BB8;
+  --orb-blue-shadow: rgba(28, 48, 94, 0.45);
+
+  /* The green is --bar-lit-* darkened, walking the same hues: muted
+     yellow-green, then sage, then a grey-green. It has to be a sibling of
+     the bar ramp rather than a fresh green, or the deck ends up with two
+     unrelated greens.
+
+     How much to darken it is not a taste call, it is a measurement.
+     Green is the hue the eye is most sensitive to, so a green and a blue
+     that look comparably dark in a swatch are nowhere near it on screen:
+     the bar ramp at 60% value still measured luminance 103 against this
+     blue's 73, and in the render the middle share drew the eye before the
+     primary. These values put it at 79 against 73 -- level with the blue
+     rather than under it, which is the right target. The two shares are
+     peer categories (easy against medium, say) and the ranking between
+     them is carried by their NUMBERS, not by dimming one field. Darkening
+     it further to actually sit under the blue takes it into drab olive
+     and loses the sage character the bar ramp is for.
+
+     Check this with a luminance calculation, never by eye. */
+  --orb-green-1: #515F3E;
+  --orb-green-2: #46573F;
+  --orb-green-3: #3E4E42;
+  /* Type in the green share's colour needs MORE value than the fill does.
+     Set a number in --orb-green-1 and it lands within a few points of
+     --dark-muted, so the second share and the remainder read as equally
+     dim and the three-way hierarchy collapses. Set it in --bar-lit-top and
+     it goes nearly as bright as the white primary, and the number stops
+     looking related to the field under it. This sits between the two. */
+  --orb-green-type: #849371;
+
+  --dark-bg: #0E1116;
+  --dark-bg-2: #141A24;
+  --dark-card: #1A2029;
+  --dark-border: rgba(255, 255, 255, 0.08);
+  /* Structural hairlines -- divider lists, rules under a label. Brighter
+     than --dark-border, which is for a card's edge: a card reads as an
+     object from its fill, so its border can be almost subliminal, whereas
+     a divider rule IS the only thing separating two items. */
+  --dark-rule: rgba(255, 255, 255, 0.20);
+  --dark-heading: #F4F6FA;
+  --dark-body: #98A2B3;
+  --dark-muted: #5C6478;
+
+  --light-bg: #FFFFFF;
+  --light-bg-2: #FAFAFB;
+  --light-card: #F5F6F8;
+  --light-border: rgba(15, 23, 42, 0.08);
+  --light-rule: rgba(15, 23, 42, 0.18);
+  --light-heading: #12141A;
+  --light-body: #667085;
+  --light-muted: #9AA3B2;
+
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+
+  --shadow-light: 0 12px 32px rgba(15, 23, 42, 0.06);
+  --shadow-dark: 0 12px 32px rgba(0, 0, 0, 0.35);
+
+  --font: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+  NOTE: sizing/overflow lives on .slide itself, deliberately NOT on
+  html/body. This file gets inlined into other pages too (the
+  build_preview.mjs stitched viewer, potentially an Artifact) -- if
+  html/body were pinned to 2560x1440, they'd hijack the *host* page's
+  layout the moment this CSS loads anywhere but a standalone
+  single-slide render. .slide carries its own explicit size, which is
+  all a standalone render needs.
+*/
+.slide {
+  position: relative;
+  width: 2560px;
+  height: 1440px;
+  overflow: hidden;
+}
+
+.slide.light { background: var(--light-bg); color: var(--light-heading); }
+.slide.dark {
+  background: radial-gradient(120% 120% at 50% 0%, var(--dark-bg-2) 0%, var(--dark-bg) 60%);
+  color: var(--dark-heading);
+}
+
+/* ---------- corner framing: keep these SMALL, never a design focus ---------- */
+.frame-logo {
+  position: absolute; top: 56px; left: 64px;
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 700; font-size: 28px; letter-spacing: 0.2px;
+  z-index: 5;
+}
+.frame-logo img { height: 28px; width: auto; }
+.frame-tag {
+  position: absolute; top: 56px; right: 64px;
+  font-size: 21px; letter-spacing: 0.5px; opacity: 0.55;
+  z-index: 5;
+}
+
+/* ---------- typography: the title/body size gap IS the hierarchy ---------- */
+/* margin-bottom is deliberate, not decorative: with none, the title sits
+   directly against the eyebrow's own line box and every hero reads as
+   cramped until someone notices and patches it slide by slide. 20px is
+   enough gap to read as two separate lines of hierarchy without opening
+   a hole before the title arrives. */
+.eyebrow {
+  font-size: 21px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; opacity: 0.55; margin-bottom: 20px;
+}
+/* Titles are LIGHT. A 300 weight at this size is what gives the deck its
+   calm; 800 was the original setting and it shouted on every slide. Light
+   type needs to run a little larger to hold the same presence, and it
+   wants tighter tracking, hence the negative letter-spacing that grows
+   with the size. Card titles and stats stay heavier -- they are lower in
+   the hierarchy and doing a different job. */
+.title { font-weight: 300; font-size: 90px; line-height: 1.12; letter-spacing: -1.5px; }
+.title.xl { font-size: 130px; letter-spacing: -2.5px; }
+.title.md { font-size: 66px; letter-spacing: -1px; }
+.subtitle { font-weight: 400; font-size: 28px; line-height: 1.55; max-width: 900px; }
+.subtitle.light { color: var(--light-body); }
+.subtitle.dark { color: var(--dark-body); }
+
+/*
+  LEDE -- a scale step between body (2.0%) and section title (6.3%), at
+  2.9% of slide height. For the one paragraph on a slide that carries the
+  argument itself rather than captioning something else: the prose block
+  under a title on a split layout, where it is the only text in its column
+  and has to hold that column on its own. At body size the same paragraph
+  reads as a caption that lost its picture.
+
+  Give it a SHORTER measure than the title above it (around 820px against
+  the title's 960). A paragraph and a display line want different measures,
+  and matching them is what makes a lede wrap to two lines when it wants
+  three.
+
+  ATTACH IT TO THE TITLE, never position it. Put the lede inside the same
+  block as its title and give it a margin-top of roughly 0.6 of the title's
+  line height (56px under a 90px .title, which renders as a 70px gap once
+  the descenders are accounted for). Two reasons, and the second is the one
+  that bites:
+
+    - It belongs to the title. A lede floated to its own vertical
+      coordinate stops reading as the title's paragraph and starts reading
+      as a second, unrelated element parked in the middle of the column.
+    - An absolute top is silently wrong the moment the copy changes. A
+      title that goes from three lines to two opens a hole; one that goes
+      to four puts the lede on top of its own last line. Neither shows up
+      until someone edits a word.
+*/
+.lede { font-size: 42px; font-weight: 400; line-height: 1.5; }
+.lede.light { color: var(--light-body); }
+.lede.dark { color: var(--dark-body); }
+
+/* a big focal number dwarfing its own label is a signature move here */
+.stat { font-weight: 800; font-size: 96px; line-height: 1; letter-spacing: -1px; }
+.stat.xl { font-size: 128px; }
+.stat.accent { color: var(--accent-500); }
+.stat-label { font-size: 22px; font-weight: 500; opacity: 0.65; margin-top: 12px; }
+/*
+  Mixed-color stats: the reference deck routinely colors only the
+  prefix/suffix of a stat (the "+" in "+83%", the "x" in "10.8x") while the
+  digits stay neutral -- it's a cheap, precise way to plant the accent
+  exactly on the punctuation that carries the meaning. Not a new
+  component, just wrap that one character in a span:
+  <span class="stat">10.8<span class="stat-accent-part">x</span></span>
+*/
+.stat-accent-part { color: var(--accent-500); }
+
+/* ---------- cards: the default content container ---------- */
+/*
+  There is ONE card treatment in this deck and it is the glass one: a
+  subtle vertical gradient running light at the bottom, and an edge where
+  the light refracts -- a conic gradient masked to a 2px band, so its
+  brightness travels round the perimeter and lands on two opposite edges
+  with dim runs between. An even 1px border and a flat fill is the single
+  thing that makes a card look like a div with a background colour.
+
+  Cards and .glass-panel are now the same material; .glass-panel differs
+  only in that it is meant for a dark slide with something rich behind it.
+  Do not reintroduce an opaque card variant -- one surface language.
+*/
+.card { position: relative; border-radius: var(--radius-lg); padding: 40px; }
+.card > * { position: relative; z-index: 1; }
+.card.dark {
+  background: linear-gradient(180deg,
+    rgba(var(--glass-tint, 200, 206, 218), 0.03),
+    rgba(var(--glass-tint, 200, 206, 218), 0.22));
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  box-shadow: 0 24px 48px -20px rgba(0,0,0,0.55);
+}
+.card.light {
+  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(233,237,243,0.90));
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  box-shadow: 0 22px 46px -22px rgba(15,23,42,0.18);
+}
+/* the refracting edge. White on a dark card, ink on a light one. */
+.card::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  padding: 2px; pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+.card.dark::after {
+  background: conic-gradient(from 130deg,
+    rgba(255,255,255,0.80) 0deg,
+    rgba(255,255,255,0.13) 52deg,
+    rgba(255,255,255,0.58) 118deg,
+    rgba(255,255,255,0.08) 188deg,
+    rgba(255,255,255,0.72) 262deg,
+    rgba(255,255,255,0.15) 322deg,
+    rgba(255,255,255,0.80) 360deg);
+}
+.card.light::after {
+  background: conic-gradient(from 130deg,
+    rgba(15,23,42,0.20) 0deg,
+    rgba(15,23,42,0.05) 52deg,
+    rgba(15,23,42,0.14) 118deg,
+    rgba(15,23,42,0.04) 188deg,
+    rgba(15,23,42,0.17) 262deg,
+    rgba(15,23,42,0.05) 322deg,
+    rgba(15,23,42,0.20) 360deg);
+}
+.card-title { font-size: 32px; font-weight: 600; margin-bottom: 16px; }
+.card-body { font-size: 23px; line-height: 1.6; }
+.card-body.light { color: var(--light-body); }
+.card-body.dark { color: var(--dark-body); }
+/* A quiet bullet list inside a card -- gray dot, not a default disc. */
+.card-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.card-list li { position: relative; padding-left: 24px; font-size: 22px; line-height: 1.5; }
+.card-list li::before {
+  content: ""; position: absolute; left: 0; top: 13px;
+  width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.5;
+}
+
+/* ---------- pills: status/tag chips, used sparingly ---------- */
+.pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 26px; border-radius: var(--radius-pill);
+  font-size: 21px; font-weight: 600;
+}
+.pill.accent { background: linear-gradient(135deg, var(--accent-500), var(--accent-700)); color: #fff; }
+.pill.neutral-light { background: #fff; color: var(--light-heading); border: 1px solid var(--light-border); }
+.pill.neutral-dark { background: rgba(255, 255, 255, 0.08); color: var(--dark-heading); }
+/*
+  Pill-with-badge: a label pill carrying its own secondary value in a
+  darker inset sub-pill -- e.g. a funnel stage reading "Leads" with a
+  "1000" badge riding inside the same chip. The badge always uses a
+  translucent black overlay so it works on any pill fill color.
+  <span class="pill neutral-light pill-badge">
+    <span data-overlay="...">Leads</span>
+    <span class="pill-badge-value" data-overlay="...">1000</span>
+  </span>
+*/
+.pill-badge { padding: 8px 8px 8px 26px; }
+.pill-badge-value { background: rgba(0,0,0,0.12); border-radius: var(--radius-pill); padding: 7px 18px; font-weight: 700; }
+
+/* ---------- bars: recessed wells, not solid blocks ---------- */
+/*
+  A bar is a dark glass well. Four things make it, and losing any one of
+  them drops it back to a flat rectangle:
+
+    - an internal vertical gradient, lighter at the top;
+    - an INSET shadow, so it reads as a recess rather than a slab sitting
+      on the slide. This is the one that does most of the work;
+    - a light hairline border all the way round;
+    - a small corner radius. Not a pill, not square.
+
+  The highlighted bar swaps the dark fill for a lit ramp -- a muted
+  yellow-green at the top, through green, falling to a pale base -- and
+  brightens its border. It carries NO outer glow: the value comes from
+  being the only lit object in a row of dark ones, and a drop shadow
+  around it just muddies the row.
+
+  Values ride above the bar in a small chip (.bar-value-pill), and the
+  series name sits inside the bar at its base (.bar-label-inside). On the
+  lit bar that label has to flip to a dark colour -- its base is pale.
+
+    <div class="bar-col">
+      <span class="bar-value-pill">$200,000</span>
+      <div class="bar accent" style="height: 88%;">
+        <div class="bar-label-inside">Budget (USD)</div>
+      </div>
+      <div class="bar-axis-label">Q4</div>
+    </div>
+*/
+.bar {
+  position: relative;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow:
+    inset 0 2px 16px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+}
+.bar.neutral-dark {
+  background: linear-gradient(180deg, rgba(255,255,255,0.085), rgba(255,255,255,0.022));
+}
+.bar.neutral-light {
+  background: linear-gradient(180deg, #EEF1F4, #DCE1E7);
+  border-color: rgba(15,23,42,0.10);
+  box-shadow: inset 0 2px 12px rgba(15,23,42,0.10), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+.bar.accent {
+  background: linear-gradient(180deg,
+    var(--bar-lit-top) 0%,
+    var(--bar-lit-mid) 42%,
+    var(--bar-lit-base) 100%);
+  border-color: rgba(255,255,255,0.34);
+  box-shadow:
+    inset 0 2px 12px rgba(38,58,48,0.26),
+    inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
+/* the value, in a chip above the bar */
+.bar-value-pill {
+  display: inline-flex; align-items: center; white-space: nowrap;
+  padding: 8px 18px; border-radius: var(--radius-pill);
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size: 22px; font-weight: 600;
+  margin-bottom: 18px;
+}
+/* the series name, inside the bar at its base */
+.bar-label-inside {
+  position: absolute; bottom: 20px; left: 0; right: 0; text-align: center;
+  font-size: 20px; font-weight: 500; color: rgba(255,255,255,0.52);
+}
+.bar.accent .bar-label-inside { color: rgba(22,36,30,0.72); }
+.bar.neutral-light .bar-label-inside { color: rgba(15,23,42,0.5); }
+
+.bar-axis-label { font-size: 20px; font-weight: 500; text-align: center; margin-top: 18px; opacity: 0.65; }
+
+/* A big value baked into the bar instead of floating above it -- for a
+   compact dashboard tile where a chip above every bar would be noise. */
+.bar-value-inside {
+  position: absolute; bottom: 62px; left: 0; right: 0; text-align: center;
+  font-weight: 700; font-size: 40px; color: rgba(255,255,255,0.9);
+}
+.bar.accent .bar-value-inside { color: rgba(18,32,26,0.88); }
+
+/* ---------- donut / ring chart (SVG, not conic-gradient -- gives a
+   true rounded stroke cap on the filled arc, which is what makes it
+   read as drawn rather than a CSS trick) ---------- */
+/*
+  <svg class="donut" viewBox="0 0 200 200" width="320" height="320">
+    <circle class="donut-track" cx="100" cy="100" r="80"/>
+    <circle class="donut-value accent" cx="100" cy="100" r="80"
+      style="--donut-offset: 377;" />  // offset = circumference * (1 - value/100); circumference here = 502.65
+  </svg>
+  Wrap the svg in a position:relative container and absolutely-center a
+  .donut-center label on top for the big number + caption.
+*/
+.donut-track, .donut-value {
+  fill: none; stroke-width: 24; stroke-linecap: round;
+  transform: rotate(-90deg); transform-origin: 50% 50%;
+}
+.donut-track { stroke: rgba(255,255,255,0.08); }
+.donut-track.on-light { stroke: var(--light-border); }
+.donut-value.accent { stroke: var(--accent-500); stroke-dasharray: 502.65; stroke-dashoffset: var(--donut-offset, 0); }
+.donut-wrap { position: relative; display: inline-flex; }
+.donut-center {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+
+/* A numbered step / lever list: circles linked by a thin connector so the
+   sequence reads as one object, not a pile of separate badges.
+
+   The circle takes the same treatment as .glass-panel -- a vertical
+   gradient running light at the bottom, plus a conic ring for the
+   refracting edge. That is what keeps it from reading as a glossy plastic
+   bullet, which is what a radial highlight over a solid accent fill gives
+   you. It needs something behind it to blur, so pair the list with a
+   .glow or a .bg-wash-*. */
+.step-circle {
+  position: relative; z-index: 1;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: linear-gradient(180deg,
+    rgba(var(--glass-tint, 150, 178, 240), 0.04),
+    rgba(var(--glass-tint, 150, 178, 240), 0.26));
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  box-shadow: 0 14px 30px -12px rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 26px; color: #fff;
+}
+/* The lit edge. It has to be ::before AND z-index:-1: a positioned
+   pseudo-element paints above the parent's inline content whichever one
+   you use, so a plain ::after ring would sit on top of the number. A
+   negative z-index puts it above the circle's own fill and below the
+   number, which is the one place it belongs. */
+.step-circle::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  padding: 2px; z-index: -1; pointer-events: none;
+  background: conic-gradient(from 130deg,
+    rgba(255,255,255,0.88) 0deg,
+    rgba(255,255,255,0.15) 52deg,
+    rgba(255,255,255,0.64) 118deg,
+    rgba(255,255,255,0.09) 188deg,
+    rgba(255,255,255,0.80) 262deg,
+    rgba(255,255,255,0.17) 322deg,
+    rgba(255,255,255,0.88) 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+/* With the circles now neutral glass, the connector carries the slide's
+   accent -- and it has to be light enough to survive against a glow.
+   accent-500 fading to transparent disappeared entirely. */
+.step-connector {
+  width: 3px; flex: 1;
+  background: linear-gradient(180deg, var(--accent-300), rgba(159,179,230,0.06));
+  margin: 0 auto;
+}
+
+/* A 3D funnel: stacked ELLIPSES (not rounded rectangles) that overlap
+   each other and narrow going down, each with a gradient that reads as
+   a lit top face and an inset shadow that reads as the disc's underside.
+   That combination -- ellipse + top-lit gradient + inset shadow -- is
+   what sells the "stacked physical object" look; a plain gradient
+   rectangle will not read the same way no matter the gradient angle.
+   Give each stage a decreasing width (e.g. 900px, 760px, 620px, 480px)
+   and a negative margin-top of roughly 35% of its height so it tucks
+   into the one above it.
+   <div class="funnel">
+     <div class="funnel-stage" style="width:900px;height:220px;">
+       <span class="pill neutral-light pill-badge"><span>Leads</span><span class="pill-badge-value">1000</span></span>
+     </div>
+     <div class="funnel-stage" style="width:760px;height:200px;margin-top:-70px;">...</div>
+   </div>
+*/
+.funnel { display: flex; flex-direction: column; align-items: center; }
+.funnel-stage {
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--accent-300) 0%, var(--accent-600) 55%, var(--accent-900) 100%);
+  box-shadow: 0 28px 48px -16px rgba(0,0,0,0.5), inset 0 -22px 30px -8px rgba(0,0,0,0.35), inset 0 10px 20px -6px rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+
+/* ---------- process chain: overlapping circles, each holding its own text ---------- */
+/*
+  Three circles running left to right, each carrying a step of a short
+  process. Four things define it:
+
+    - They GROW left to right, and not timidly. The last step wants to
+      be well over half again the diameter of the first (420 / 540 / 680
+      here) or the progression reads as an accident.
+    - They stack front to back starting on the LEFT, so the leftmost
+      circle is on top and each one behind the last. Layering it the
+      other way is the easy mistake and it reverses the reading order.
+    - The first circle is a light solid, the second the accent with its
+      radial origin at the BOTTOM RIGHT rather than the middle, so the
+      light in it sits low and off-centre.
+    - The last circle is BLURRED into a soft glow with no crisp edge. The
+      blur goes on the fill only (.step-fill.soft), never on the step, or
+      the text blurs with it. That is why fill and text are two elements.
+
+  Text is centred in the circle, bullets included, and sized to about
+  76% of the diameter so it never touches the curve. The smallest circle
+  is what sets that number -- check the copy fits there first.
+
+  <div class="process-chain" style="top:540px; left:830px; width:1510px; height:680px;">
+    <div class="process-step" style="--d:680px; left:830px; top:0;   z-index:1;">
+      <div class="step-fill soft"></div>
+      <div class="step-text">...</div>
+    </div>
+    <div class="process-step" style="--d:540px; left:360px; top:70px; z-index:2;">
+      <div class="step-fill accent"></div><div class="step-text">...</div>
+    </div>
+    <div class="process-step" style="--d:420px; left:0;     top:130px; z-index:3;">
+      <div class="step-fill light"></div><div class="step-text on-light">...</div>
+    </div>
+  </div>
+*/
+.process-chain { position: absolute; }
+.process-step { position: absolute; width: var(--d); height: var(--d); }
+.process-step .step-fill { position: absolute; inset: 0; border-radius: 50%; }
+.step-fill.light  { background: radial-gradient(circle at 36% 28%, #FFFFFF, #DCE0E7 90%); }
+.step-fill.accent { background: radial-gradient(circle at 76% 80%, var(--accent-400), var(--accent-600) 58%, var(--accent-700) 100%); }
+.step-fill.soft   {
+  background: radial-gradient(circle at 62% 62%, var(--accent-400), var(--accent-700) 84%);
+  filter: blur(var(--soft-blur, 50px));
+}
+.process-step .step-text {
+  position: absolute; inset: 0; padding: 0 12%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; color: #fff;
+}
+.process-step .step-text.on-light { color: var(--light-heading); }
+.step-label { font-size: 30px; font-weight: 600; margin-bottom: 18px; }
+.step-bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 26px; line-height: 1.4; }
+.step-bullets li::before { content: "\2022  "; opacity: 0.6; }
+
+/* A thin decorative stroke circle behind a diagram -- not a glow, just
+   an outline suggesting an orbit/halo. Reference deck uses this behind
+   the Before/After venn on light backgrounds. Size it larger than the
+   shapes it sits behind and nudge it off-center for the "orbit" feel
+   rather than a bullseye. */
+.orbit-ring {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  border: 1px solid var(--light-border);
+}
+.orbit-ring.accent { border-color: var(--accent-100); }
+
+/* ---------- glass: frosted, translucent surfaces (a second card language) ---------- */
+/* Use on DARK slides only -- translucency needs something visually rich
+   behind it (a glow, a wash, an image) to read as "glass" rather than
+   just a faint gray box. Don't mix with .card on the same slide's cards;
+   pick one language per slide. */
+/* The glass comes from two things and neither is a flat fill:
+
+   1. A subtle INTERNAL VERTICAL gradient. Grey to grey is the default and
+      reads as glass on any ground; swap in --glass-tint for a coloured
+      variant. Keep the range narrow -- a strong gradient reads as a
+      painted panel, not as a transparent one.
+   2. An edge where the light REFRACTS. The ring below is a conic gradient
+      masked to a 2px band, so its brightness travels around the perimeter
+      and lands bright on two opposite edges with dim runs between. A
+      single even border is the thing that makes glass look like a grey
+      box. */
+.glass-panel {
+  position: relative;
+  background: linear-gradient(180deg,
+    rgba(var(--glass-tint, 200, 206, 218), 0.02),
+    rgba(var(--glass-tint, 200, 206, 218), 0.24));
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 48px -20px rgba(0,0,0,0.55);
+  padding: 40px;
+}
+.glass-panel::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  padding: 2px; pointer-events: none;
+  background: conic-gradient(from 130deg,
+    rgba(255,255,255,0.88) 0deg,
+    rgba(255,255,255,0.15) 52deg,
+    rgba(255,255,255,0.64) 118deg,
+    rgba(255,255,255,0.09) 188deg,
+    rgba(255,255,255,0.80) 262deg,
+    rgba(255,255,255,0.17) 322deg,
+    rgba(255,255,255,0.88) 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+.glass-panel > * { position: relative; z-index: 1; }
+
+/* ---------- glass lenses: narrow oval cylinders in a receding stack ---------- */
+/*
+  The motif is a row of LENSES -- narrow vertical ovals with real
+  cylindrical depth -- not flat circles, which is the easy mistake.
+
+  Each lens is two ellipses: .lens-face is the front glass, and
+  .lens-side is the same ellipse nudged LEFT behind it so a thin crescent
+  of the cylinder wall shows past the face's left edge, over the lens
+  behind it. Both are translucent and blurred, the side markedly more
+  transparent than the face; the blur plus a light transparent tint inside
+  the oval is the whole glass effect.
+
+  Rules:
+    - Ovals, not circles. Width is roughly 0.53 of height.
+    - They shrink from left to right and overlap heavily, and each is
+      layered BELOW the one to its right, so the rightmost sits on top.
+    - Tint them from the right: light blue, then teal, then grey, then a
+      grey so transparent it is barely there.
+    - ONE soft line (.lens-axis) lies in the background through every
+      centre. It must be several pixels tall and carry its own blur: a 1px
+      hairline behind the glass is erased outright by each face's backdrop
+      blur, so it goes missing exactly where it is supposed to read. Do NOT
+      put a specular streak inside each lens either -- with several lenses
+      sharing a centre line those streaks merge into one hard rule across
+      the group.
+
+  Use on DARK slides only -- translucency needs something behind it.
+
+  <div class="lens-field" style="top:266px; left:1400px; width:1010px; height:926px;">
+    <div class="lens-axis"></div>
+    <div class="glass-lens" style="--lw:491px; --lh:926px; --lc:150,158,170; --la:0.04; left:0;">
+      <div class="lens-side"></div><div class="lens-face"></div>
+    </div>
+    ...
+  </div>
+*/
+.lens-field { position: absolute; }
+/* The axis sits BEHIND the lenses, and it has to be wide and pre-blurred
+   to survive being there. A 1px hairline behind the glass is annihilated
+   by each face's backdrop blur -- measured, it registers nothing at all
+   inside the ovals. Give it real height and its own blur and the total
+   luminance survives, spread soft, which is what reads as a line lying in
+   the background rather than a rule drawn over the glass. Keep it FIRST in
+   the markup so the whole stack paints over it. */
+.lens-axis {
+  position: absolute; top: 50%; left: -320px; right: -220px; height: 8px;
+  transform: translateY(-50%);
+  filter: blur(5px);
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255,255,255,0.42) 22%,
+    rgba(255,255,255,0.55) 58%,
+    rgba(255,255,255,0.26) 88%,
+    transparent);
+}
+.glass-lens {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: var(--lw); height: var(--lh);
+}
+.glass-lens .lens-side, .glass-lens .lens-face { position: absolute; inset: 0; border-radius: 50%; }
+.glass-lens .lens-side {
+  transform: translateX(var(--ld, -28px));
+  background: rgba(var(--lc), calc(var(--la) * 0.40));
+  -webkit-backdrop-filter: blur(7px); backdrop-filter: blur(7px);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.glass-lens .lens-face {
+  background: linear-gradient(155deg,
+    rgba(var(--lc), calc(var(--la) * 1.35)),
+    rgba(var(--lc), calc(var(--la) * 0.40)));
+  -webkit-backdrop-filter: blur(11px); backdrop-filter: blur(11px);
+  border: 1px solid rgba(255,255,255,0.13);
+  box-shadow: inset 0 3px 12px rgba(255,255,255,0.06);
+}
+
+/* ---------- glass cutout: one stepped shape with two concave fillets ---------- */
+/*
+  The second glass layout, and it is NOT two overlapping rectangles. Trace
+  the reference outline and it closes as a single continuous stepped shape:
+  an upper-left block whose right edge drops to meet the top edge of a
+  wider lower-right block, and whose bottom edge meets that block's left
+  edge. Both of those meetings are CONCAVE corners, filleted like every
+  other corner. One shape, so one gradient runs across the whole composite.
+
+  The two edges that link the blocks are ANGLED at about 50 degrees, not
+  vertical, and their four junctions take a much smaller radius than the
+  outer corners. A vertical link with a large radius reads as two boxes
+  awkwardly glued; the diagonal is what makes it one object.
+
+  The gradient runs light at the BOTTOM, dark at the top.
+
+  A second, dimmer copy of the shape sits behind and below the first
+  (.cut-ghost), offset down and right, so only its bottom and right
+  contours show. That is what reads as stacked sheets of glass.
+
+  Two mechanics make it work:
+
+  - The silhouette is a clip-path, which rules out the ::after ring used by
+    .glass-panel: a mask band follows border-radius, not a clip-path, so
+    the concave arcs would come out unbordered. The edge is an inline SVG
+    stroke over the same path, with a diagonal gradient -- because that
+    gradient is spatial rather than along the path, different runs of the
+    perimeter pick up different brightness, which is the refraction read.
+
+  - The path is declared ONCE, as an SVG <path> in <defs>. The fill clips
+    to it via a <clipPath><use>, and the edge strokes it via a <use>.Writing
+    the path twice (once for clip-path, once for the d attribute) is how
+    the two drift apart the first time a size changes.
+
+  Arc flags, traversing clockwise: convex corners take sweep-flag 1,
+  concave corners take sweep-flag 0. Getting a concave flag wrong bulges
+  the corner outward and the step disappears.
+
+  <svg width="0" height="0" style="position:absolute"><defs>
+    <path id="cutPath" d="M 40 0 L 769 0 A 40 40 0 0 1 809 40 ... Z"/>
+    <clipPath id="cutClip" clipPathUnits="userSpaceOnUse"><use href="#cutPath"/></clipPath>
+    <linearGradient id="glassEdge" x1="0" y1="0" x2="1" y2="1">...</linearGradient>
+  </defs></svg>
+
+  <div class="cut-shape" style="left:163px; top:531px; width:2231px; height:750px;">
+    <div class="cut-fill" style="clip-path: url(#cutClip);"></div>
+    <svg class="cut-edge" viewBox="0 0 2231 750"><use href="#cutPath"/></svg>
+    <div class="cut-zone">...</div>
+  </div>
+*/
+.cut-shape { position: absolute; }
+.cut-fill {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(var(--glass-tint, 200, 206, 218), 0.02),
+    rgba(var(--glass-tint, 200, 206, 218), 0.24));
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+}
+.cut-edge { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.cut-edge use { fill: none; stroke: url(#glassEdge); stroke-width: 2; }
+/* a second sheet of the same shape, stacked below and behind the first --
+   only its bottom and right contours show past the front one */
+.cut-ghost { position: absolute; inset: 0; transform: translate(14px, 26px); opacity: 0.5; }
+.cut-zone { position: absolute; }
+
+/* ---------- divider-list: a plain list separated by hairlines, no card fill ---------- */
+/* Use when content is a short set of label+description pairs that
+   shouldn't compete visually with a card elsewhere on the same slide --
+   a quieter alternative to a card grid. .cols lays it out side by side
+   with vertical rules instead of stacked with horizontal ones. */
+.divider-list { display: flex; flex-direction: column; }
+.divider-list.cols { flex-direction: row; }
+.divider-item { padding: 28px 0; border-bottom: 1px solid var(--dark-rule); }
+.divider-item:last-child { border-bottom: none; }
+.divider-list.cols .divider-item {
+  flex: 1; padding: 0 44px; border-bottom: none; border-right: 1px solid var(--dark-rule);
+}
+.divider-list.cols .divider-item:first-child { padding-left: 0; }
+.divider-list.cols .divider-item:last-child { border-right: none; padding-right: 0; }
+.divider-list.light .divider-item { border-color: var(--light-rule); }
+
+/* ---------- ambient background wash: a soft glow bleeding in from one edge ---------- */
+/* A quieter, more atmospheric alternative to .glow for a dark slide's
+   overall mood -- not positioned behind a specific diagram, just felt
+   across the whole canvas. Place as an absolutely-positioned full-bleed
+   div, first child of .slide, behind everything else. */
+.bg-wash-right {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(55% 90% at 100% 50%, var(--teal-glow) 0%, transparent 70%);
+}
+
+/* ---------- band field: gradient rectangles anchored to one corner ---------- */
+/* A more architectural alternative to .glow for a dark slide's background:
+   a row of equal-width rectangles in one corner, each a slightly different
+   value, the whole field fading out down the canvas.
+
+   The construction is exact -- these are not stylistic suggestions, they
+   are what makes it read as faceted panels instead of a wash:
+
+     - FIVE rectangles, EQUAL width, TOUCHING. One rectangle is 1/16th of
+       the slide width (160px here), so the field is 5/16ths -- 800px. They
+       are flex: 1, so they stay equal whatever --field-w is set to.
+     - Each rectangle carries its own base value in --bc, stepping DARKER
+       FROM RIGHT TO LEFT. The right edge of the field is the lightest.
+     - Inside each rectangle, a small gradient runs LIGHTER ON THE LEFT to
+       DARKER ON THE RIGHT. This is the detail that does the real work: it
+       puts a step up in value at every boundary, which is what defines the
+       vertical edges and makes each rectangle read as its own lit panel.
+       Without it the row is just five flat blocks.
+     - The whole field crops out toward the bottom, via a mask on the
+       container rather than per-rectangle stops, and the mask is tilted a
+       few degrees off vertical so it crops higher on the left than on the
+       right. Because the mask varies along its own axis, the rectangles'
+       vertical edges stay crisp through it.
+
+   Two constructions that look plausible and both fail: one shared colour
+   at varying opacity reads as translucent sheets stacked on each other,
+   and full-height stripes with per-rectangle fade depths make the darker
+   neighbour look like it continues behind the brighter one.
+
+   Values are opaque, so calibrate them against the slide background
+   directly rather than guessing at an opacity.
+
+   <div class="band-field">
+     <div class="band" style="--bc: 23,30,42;"></div>
+     <div class="band" style="--bc: 28,38,54;"></div>
+     <div class="band" style="--bc: 34,47,68;"></div>
+     <div class="band" style="--bc: 41,58,84;"></div>
+     <div class="band" style="--bc: 49,70,103;"></div>
+   </div>
+*/
+.band-field {
+  position: absolute; top: 0; right: 0;
+  width: var(--field-w, 800px); height: var(--field-h, 1440px);
+  display: flex; align-items: stretch;
+  pointer-events: none; z-index: 0;
+  /* Tilted off vertical (188deg rather than 180deg) so the field crops
+     higher on the left than on the right. The tilt is along the mask's own
+     axis, so the rectangles' vertical edges stay crisp. */
+  -webkit-mask-image: linear-gradient(188deg, #000 0%, rgba(0,0,0,0.9) 22%, rgba(0,0,0,0.45) 41%, transparent 56%);
+          mask-image: linear-gradient(188deg, #000 0%, rgba(0,0,0,0.9) 22%, rgba(0,0,0,0.45) 41%, transparent 56%);
+}
+.band-field .band {
+  flex: 1;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.17) 100%),
+    linear-gradient(0deg, rgb(var(--bc)), rgb(var(--bc)));
+}
+
+/* ---------- quad grid: one claim on the left, four breakdowns on the right ---------- */
+/*
+  The dense slide, and the only layout here that is allowed to be dense.
+  Left column: title plus a .lede paragraph, which set the main point.
+  Right: a 2x2 grid of quadrants, each with a small index number top-left
+  and a short title over a short paragraph, breaking that point into four.
+  Two of the four quadrants carry an abstract texture instead of a fill.
+
+  Four things make it, and the last two are what stop it looking like a
+  table with rounded corners deleted:
+
+  - **The hairlines come from the GAP, not from borders.** The container
+    paints the rule colour and carries a 1px gap; each light quadrant
+    paints the slide background over it. One rule per division, no doubled
+    edges to reconcile, and a textured quadrant simply covers its own share
+    of the grid so its edges disappear -- which is what the reference does
+    and what makes the textured cells read as windows cut into the grid
+    rather than as tiles sitting in it.
+  - **All four titles align on one line.** The index number is pinned to
+    the top and the title sits a FIXED distance below it, so the four
+    titles land on the same baseline whatever their body length. The
+    obvious construction -- bottom-anchor the text block with margin-top:
+    auto -- gives four titles at four different heights the moment one body
+    runs a line longer, and the ragged result is exactly the structure this
+    layout is selling.
+  - **The textured quadrants take the diagonal**, 02 and 03. Putting them
+    side by side splits the grid into a light half and a dark half; on the
+    diagonal they hold the whole grid together.
+  - **A textured quadrant needs a scrim.** The texture is at its most
+    active where the body copy sits, so a bottom-weighted dark gradient
+    goes over the texture and under the text. Without it the copy is
+    legible in some columns of the texture and not others, which no amount
+    of colour picking fixes.
+
+  **This layout is LIGHT ONLY.** Its whole contrast structure is dark
+  textures reading as windows cut into a light grid, and it does not
+  invert: .tex-fins is within a few values of --dark-bg, so on a dark
+  slide that quadrant vanishes and the grid loses half its composition. A
+  dark version is a different exercise needing light-on-dark textures, not
+  a class on this one.
+
+  Density: this layout can hold four paragraphs, which does not make it
+  exempt from copy-discipline.md. Hold each quadrant body to its 25-word
+  ceiling. At 23px in a 460px column that is still four lines per
+  quadrant, so the slide looks as dense as the reference while staying
+  inside the budget.
+*/
+.quad-grid {
+  position: absolute; z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1px;
+  background: var(--light-rule);
+  border: 1px solid var(--light-rule);
+}
+.quad { position: relative; overflow: hidden; padding: 50px; }
+.quad.plain { background: var(--light-bg); }
+.quad > * { position: relative; z-index: 2; }
+/* the scrim, over a texture and under the copy */
+.quad.on-tex::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg,
+    transparent 16%, rgba(4,6,12,0.52) 50%, rgba(4,6,12,0.80) 100%);
+}
+.quad-num {
+  font-size: 22px; font-weight: 500; letter-spacing: 1.5px;
+  font-variant-numeric: tabular-nums; color: var(--light-muted);
+}
+/* The fixed drop is what aligns the four titles. Re-derive it if the
+   quadrant size changes: it puts the title cap at about 45% of cell
+   height, and leaves room for a body of four or five lines under it. */
+.quad-text { margin-top: 176px; }
+.quad-title { font-size: 32px; font-weight: 600; margin-bottom: 18px; }
+.quad-body { font-size: 23px; line-height: 1.6; color: var(--light-body); }
+.quad.on-tex .quad-num { color: rgba(255,255,255,0.62); }
+.quad.on-tex .quad-title { color: #fff; }
+.quad.on-tex .quad-body { color: rgba(255,255,255,0.84); }
+
+/* ---------- abstract textures for a quad-grid cell ---------- */
+/*
+  Generated, not photographed. Two reasons that matters beyond the artifact
+  CSP blocking external images: a gradient stack re-colours to the brand
+  accent in one place, and it stays sharp at any cell size, which a crop of
+  a bitmap does not.
+
+  Both follow the same rule as every other surface here -- direction and a
+  lit edge, never a flat wash.
+
+  .tex-streak, long-exposure light smeared vertically. Horizontal bands of
+  accent blue over wide black runs, a blown-out top right, and crisp
+  vertical hairlines. The hairlines and the dark smears each run at TWO
+  coprime periods, because a single period combs into a barcode: the eye
+  locks onto the repeat and the texture stops reading as motion. Keep the
+  dark smears wide and low-alpha for the same reason -- narrow and opaque
+  is a barcode however you space it.
+
+  .tex-fins, diagonal lit ridges. One repeating gradient per fin: dark
+  trough, a 2px lit edge, dark again. A second pass at 121.5deg against the
+  first's 118deg gives the ridges a slight wander instead of dead-straight
+  ruling, which is the difference between a photographed surface and a CSS
+  pattern. Two radial gradients on top vary the lighting across the panel
+  so it is not uniformly lit.
+*/
+.tex-streak {
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0 41px, rgba(233,242,255,0.62) 41px 43px, transparent 43px 79px),
+    repeating-linear-gradient(90deg,
+      transparent 0 56px, rgba(214,228,255,0.26) 56px 57px, transparent 57px 103px),
+    repeating-linear-gradient(90deg,
+      rgba(0,0,0,0.34) 0 16px, transparent 16px 71px),
+    repeating-linear-gradient(90deg,
+      rgba(0,0,0,0.22) 0 9px, transparent 9px 43px),
+    radial-gradient(135% 58% at 92% 2%,
+      rgba(232,240,255,0.95) 0%, rgba(160,184,230,0.38) 32%, transparent 64%),
+    linear-gradient(180deg,
+      #03050b 0%, #060c1c 10%,
+      var(--accent-600) 26%, #101f4e 36%,
+      #03050b 46%,
+      var(--accent-600) 58%, #0c1740 68%,
+      #03050b 77%,
+      var(--accent-500) 90%, var(--accent-700) 100%);
+}
+.tex-fins {
+  background:
+    radial-gradient(115% 100% at 8% 4%, rgba(255,255,255,0.16), transparent 62%),
+    radial-gradient(80% 80% at 96% 86%, rgba(255,255,255,0.07), transparent 60%),
+    repeating-linear-gradient(118deg,
+      #08080a 0px, #0e0e12 12px,
+      #2e3037 21px, #8d929b 23px, #35373e 25px,
+      #121216 34px, #08080a 45px);
+}
+/* the wander pass. It sits under the scrim and the copy. */
+.tex-fins::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; opacity: 0.45;
+  background: repeating-linear-gradient(121.5deg,
+    transparent 0px, transparent 16px,
+    rgba(255,255,255,0.09) 22px, transparent 28px, transparent 49px);
+}
+
+/* ---------- share split: 2-3 numbers over a field of 100 unit circles ---------- */
+/*
+  A percentage made countable. Two or three big numbers across the top, and
+  under them a field of 100 circles with the shares painted into it left to
+  right. It exists because a bare percentage is abstract in a way an
+  audience cannot picture, and one hundred circles with sixty-nine of them
+  lit is a quantity someone can actually see.
+
+  Use it for a distribution of TWO or THREE parts of one whole -- queries
+  that run against queries that do not, or easy / medium / complex. Four
+  parts and the field stops being readable at a glance; a change over time
+  is a bar chart instead.
+
+  THE FIELD IS 100 CIRCLES, 5 ROWS OF 20. That is the whole point and it is
+  worth resisting a prettier grid for: one circle is one percent, so the
+  boundary between two shares lands on an exact circle and a viewer can
+  count it. The reference for this layout used 4 rows of 16, which is 64
+  circles at 1.5625% each, and its 69% boundary came out as a ragged
+  staircase that ends on a different column in three of the four rows --
+  the tell that the picture and the number disagree.
+
+  FILL ORDER IS COLUMN-MAJOR: down each column, then rightward. This is
+  the difference between the layout working and not working, and it is not
+  the order CSS grid gives you by default. Filling row by row means a 69%
+  share becomes three full rows, a partial fourth and an empty fifth --
+  which the eye reads as horizontal BANDS stacked down the slide, a
+  progress bar wrapped onto five lines. The two populations have to stand
+  side by side as two vertical blocks, because side by side is what "two
+  parts of one whole" looks like. Hence grid-auto-flow: column against
+  explicit grid-template-rows.
+
+  The consequence to accept: one column is five percent, so only a share
+  landing on a multiple of five gives a perfectly straight boundary.
+  Anything else leaves a single one-circle notch at the bottom of the
+  partial column, which is the honest thing to show -- it is where the
+  real number falls. Do not round the data to straighten the edge.
+
+  Brightest share first, remainder last on the right. Never distribute a
+  share across the field or interleave it.
+
+  Measured proportions, as percentages of slide height:
+
+    | big number digit top | 23.9% |
+    | big number baseline  | 36.0% |
+    | note cap top         | 40.6% |
+    | field top            | 52.0%, same line the stat rail starts on |
+    | field bottom         | ~90.5% |
+
+  The numbers:
+
+  - **The bright one is 239px at weight 800** (16.6% of slide height),
+    which is far past .stat.xl and correct here. It is the only figure on
+    the slide carrying real weight, so it gets all of it -- the same
+    reasoning that takes the stat rail's four numbers DOWN to 500. Stat
+    weight is a function of how many stats share the slide.
+  - **The remainder is the same size and near the background.**
+    --dark-muted, and its note too. It reads as barely there on purpose:
+    it is the share the slide is arguing against, and making it legible
+    gives it equal billing.
+  - **With three shares the second one goes in the MIDDLE**, in --teal-*,
+    left number bright, right number muted. This is the documented job of
+    the second hue: three shades of one blue are much harder to tell apart
+    at a glance than blue against teal against grey. Placing it centred on
+    the canvas rather than over its own run of circles keeps the three
+    numbers a clean triptych, which is worth more than the alignment.
+
+  The circles, and both details came from the brief rather than the render:
+
+  - **The fill gradient comes from a SIDE, not the centre.** A linear
+    gradient at 118deg, so the light has a direction across the whole
+    field and every circle is lit the same way. A radial origin inside the
+    circle turns each one into an individual sphere and the field reads as
+    a bag of marbles instead of one surface.
+  - **The reflections sit on the SIDES.** The same masked conic ring the
+    card system uses for its refracting edge, phased so its two bright
+    runs land at 90deg and 270deg -- the left and right edges. Our other
+    conic rings start at 130deg, which puts the brights on the diagonals;
+    on a circle this small that reads as a smudge rather than a rim light.
+
+  <div class="unit-field" style="left:160px; top:748px; width:2240px;">
+    <div class="unit filled"></div> ... x69
+    <div class="unit rest"></div>   ... x31
+  </div>
+*/
+.unit-field {
+  position: absolute; z-index: 1;
+  display: grid;
+  /* Column-major. The rows are explicit and the columns are implicit, which
+     is what makes items flow DOWN a column before starting the next one. */
+  grid-auto-flow: column;
+  grid-template-rows: repeat(var(--rows, 5), 1fr);
+  grid-auto-columns: 1fr;
+  gap: var(--unit-gap, 6px);
+}
+/* The field needs an explicit height as well as a width, because 1fr rows
+   have nothing to resolve against otherwise. For 100 circles on a 2240px
+   width at gap 6, square cells want height 555px:
+     cell = (2240 - 19*6) / 20 = 106.3   ->   5*106.3 + 4*6 = 555
+   Re-derive both if the width, the gap or the row count changes. */
+.unit { position: relative; border-radius: 50%; }
+/*
+  Light from the upper left, ACROSS THE FIELD rather than per circle. Every
+  circle carries the same 118deg ramp, so the whole field reads as one
+  surface under one light. A radial origin inside each circle makes each one
+  its own little sphere and the field becomes a bag of marbles.
+
+  The ramps are --orb-* (see the token block at the top), three stops in a
+  narrow band. Two things about them are easy to get wrong in opposite
+  directions:
+
+    - A WIDE ramp makes a circle look like it is fading out, and a field of
+      them looks switched off. This was the first failure here: accent-400
+      down to accent-700 put most of each circle's area in navy.
+    - The fix is NOT to pull the whole ramp brighter, which is the obvious
+      next move and lands on stock office blue. It is to narrow the range
+      and place it a step deeper than the accent mid-tones. A narrow deep
+      band reads as one considered material; a wide bright one reads as a
+      default chart fill.
+
+  The second share must not be BRIGHTER than the first, and a green needs
+  far more darkening than intuition suggests to get there -- green is the
+  hue the eye is most sensitive to, so a green and a blue that look
+  comparably dark as hex values are nowhere near it on screen. Measure the
+  two ramps' luminance rather than trusting the swatch. Level is the
+  target, not dimmer: the two shares are peer categories and the ranking
+  between them is carried by their numbers.
+*/
+.unit.filled {
+  background: linear-gradient(118deg,
+    var(--orb-blue-1) 0%, var(--orb-blue-2) 52%, var(--orb-blue-3) 100%);
+}
+.unit.second {
+  background: linear-gradient(118deg,
+    var(--orb-green-1) 0%, var(--orb-green-2) 52%, var(--orb-green-3) 100%);
+}
+.unit.rest {
+  background: linear-gradient(118deg,
+    rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.105) 52%, rgba(255,255,255,0.055) 100%);
+}
+/* The reflections: a conic ring masked to a 2px band, phased so the bright
+   runs land on the left and right edges. */
+.unit::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  padding: 2px; pointer-events: none;
+  background: conic-gradient(from 0deg,
+    rgba(255,255,255,0.03)  0deg,
+    rgba(255,255,255,0.58)  90deg,
+    rgba(255,255,255,0.03) 180deg,
+    rgba(255,255,255,0.50) 270deg,
+    rgba(255,255,255,0.03) 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+.unit.rest::after { opacity: 0.5; }
+
+.share-num { font-weight: 800; font-size: 239px; line-height: 1; letter-spacing: -5px; }
+.share-num.second { color: var(--orb-green-type); }
+.share-num.rest { color: var(--dark-muted); }
+.share-note { font-size: 28px; line-height: 1.55; color: var(--dark-body); }
+.share-note.rest { color: var(--dark-muted); }
+
+/* ---------- stat rail: one claim over 3-4 numbers in hairline columns ---------- */
+/*
+  A claim at hero size in the top-left, and under it a row of columns each
+  holding a small label, a large number, and a hairline down its left edge
+  linking the two. The most compact way this system can put evidence under
+  an assertion, and the calmest -- there are no cards, no fills and no
+  icons, so the only things on the canvas are type and four hairlines.
+
+  IT IS A RHYTHM, NOT A GRID OF STAT CARDS, and the proportions are what
+  make it read as one. All four are measured off the reference and given
+  here as percentages of slide height so they survive a canvas change:
+
+    | claim cap top                  | 16.3% |
+    | rule top, = every column's top | 52.0% |
+    | label cap top                  | 54.1% |
+    | number baseline                | 91.4% |
+    | rule bottom                    | 100%, bleeding off the slide |
+
+  Three of those deserve saying out loud, because each one looks like a
+  mistake in isolation:
+
+  - **The rule starts at 52%.** The numbers own the whole bottom half and
+    the claim owns the top. Pull the rail up to close the gap and the slide
+    turns into a title with a stat strip under it, which is a different and
+    much more ordinary slide.
+  - **The void between label and number is 27% of the slide height** -- the
+    largest single empty area on the canvas, and deliberate. This is the
+    one place `justify-content: space-between` is correct rather than the
+    failure described in design-system.md section 8: there the gap is
+    accidental, left over because content did not reach the bottom of a
+    container it was stretched into. Here the label is pinned to the top of
+    the column and the number to the bottom, the distance between them is
+    the same in every column, and it is that shared distance that makes the
+    row read as one object. Fill it with a sparkline or a note and the
+    layout collapses.
+  - **The rule keeps going past the number and off the bottom edge.**
+    Stopping it under the number closes each column into a box, and four
+    boxes is a card grid with the fills deleted. Running off the canvas is
+    what keeps them as columns.
+
+  Dropping to three numbers or two REMOVES COLUMNS FROM THE LEFT and leaves
+  the rest where they were: the rail is anchored right, the column width is
+  fixed, and the vacated slot becomes more breathing room under the claim.
+  Re-flowing three columns across the full width instead changes the pitch,
+  and a deck whose stat rails have different pitches slide to slide loses
+  the one thing this layout is for.
+
+  Accent: keep the numbers even. Their sameness is the point, so a single
+  .stat-accent-part on the unit character of the ONE number the claim
+  actually leans on is the whole accent budget for the slide.
+
+  <div class="stat-rail" style="top:748px;">
+    <div class="rail-col">
+      <div class="rail-label" >Annual savings</div>
+      <div class="stat xl">$1.2M</div>
+    </div>
+    ... x3
+  </div>
+*/
+.stat-rail {
+  position: absolute; right: 160px; bottom: 0;
+  display: grid; grid-auto-flow: column;
+  grid-auto-columns: var(--rail-col, 560px);
+  z-index: 2;
+}
+.rail-col {
+  position: relative;
+  display: flex; flex-direction: column; justify-content: space-between;
+  /* --rail-foot is what puts the number's baseline at 91.4% and leaves the
+     rule running the last 8.6% off the slide. It is derived from the type:
+     at 150px/line-height 1 the baseline is 129.5px below the box top, so
+     1440 - 1317 - (150 - 129.5) = 102. Re-derive it if the size changes. */
+  padding: var(--rail-label-drop, 26px) 24px var(--rail-foot, 102px) var(--rail-indent, 42px);
+}
+/* The hairline: the column's left edge, top to bottom, running past the
+   number and off the slide. A card border could be almost subliminal here;
+   this rule is the only structure on the slide, so it takes the brighter
+   --*-rule value. */
+.rail-col::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 1px; background: var(--light-rule);
+}
+.rail-col.on-dark::before { background: var(--dark-rule); }
+/* Card-title size (2.2% of height): this line titles its column, and at
+   body size it goes weedy against a number this large. */
+.rail-label { font-size: 32px; font-weight: 500; line-height: 1.35; color: var(--light-body); }
+.rail-label.on-dark { color: var(--dark-body); }
+/*
+  The rail's numbers OVERRIDE the deck's 800-weight stat, down to 500, and
+  run larger to compensate (150px, the reference's 10.4% of slide height).
+  This is a deliberate layout exception in the same class as the cover's
+  light title, and it is worth knowing why rather than treating it as a
+  taste call: .stat is 800 because a stat is normally ONE figure inside a
+  card, competing with the card's own title and body for focus, and weight
+  is how it wins. Here there are four figures at hero size with nothing
+  else on the canvas at all. They cannot fail to be the focus, so the
+  weight buys nothing and costs the slide its calm -- four 800-weight
+  numbers at this size read as a row of black slabs and bury the
+  300-weight claim above them, which is the one thing the numbers are
+  supposed to be serving.
+
+  With label and number on the same weight, the hierarchy comes entirely
+  from size: 32px against 150px is 4.7x, straight down the middle of the
+  4-6x band in design-system.md's DNA rule 1.
+*/
+.rail-col .stat { font-size: 150px; font-weight: 500; letter-spacing: -2px; }
+
+/* ---------- statement frame: small note in one corner, the claim in the other ---------- */
+/*
+  A whole-slide composition rather than a component. Three things only: a
+  small block of detail in the TOP-LEFT corner, one diagram across the
+  middle band, and the slide's claim at hero size in the BOTTOM-RIGHT,
+  right-aligned. The middle of the canvas carries nothing but the diagram,
+  which is what makes the two text blocks read as opposite ends of a
+  diagonal instead of as a header and a footer.
+
+  Direction is not arbitrary. Detail first, then the thing itself, then
+  the verdict last and largest, following the reading diagonal. Flipping
+  the two corners puts the verdict where the eye starts and the diagram
+  stops being the argument.
+
+  The claim wants a period and no subtitle under it. There is nothing else
+  on the slide competing, so anything added here reads as a hedge.
+
+  <div class="corner-note">
+    <div class="subtitle light">Most of what your company knows is in ...</div>
+  </div>
+  ... diagram ...
+  <div class="hero-statement"><div class="title xl">Nobody can read ...</div></div>
+*/
+.corner-note { position: absolute; top: 200px; left: 160px; width: 900px; z-index: 2; }
+.hero-statement {
+  position: absolute; right: 160px; bottom: 150px;
+  width: 2000px; text-align: right; z-index: 2;
+}
+/* Mirrored: note top-right, claim bottom-left. Use only when something
+   else on the slide already pulls the eye rightward first. */
+.corner-note.right { left: auto; right: 160px; text-align: right; }
+.hero-statement.left { right: auto; left: 160px; text-align: left; }
+
+/* ---------- scatter → order: structure coming out of a mess ---------- */
+/*
+  Loose dots on the left, a hairline arrow, the same dots in a grid on the
+  right. It says "this thing brings order" before a word of the slide is
+  read, and it is the one diagram in this system that argues by ARRANGEMENT
+  rather than by size, quantity or sequence. Reach for it when the claim is
+  about structure appearing, and for nothing else -- a two-state
+  before/after that is really about a *quantity* changing belongs in
+  .bar-col or the Venn pair.
+
+  What makes it work, in order of how easily each one is lost:
+
+    - The scattered side is DULLER than the ordered side, in exactly the
+      way an unlit shape is duller than a lit one. Neutral grey against
+      accent blue. Both sides in accent, or both neutral, and the diagram
+      says nothing at all.
+    - The scattered dots are the SAME SIZE as the ordered ones and there
+      are one or two MORE of them, one of those sitting well away from the
+      cluster. Same size means the eye reads a rearrangement of the same
+      material; varying the sizes turns it into a chart about magnitude.
+    - No dot touches another. Place them by real coordinates with roughly
+      120px between centres at --dot 86px, and check the render -- a
+      scatter that looks random usually is not, and a scatter generated
+      from a small jitter around a grid reads as a grid.
+    - The arrow is a HAIRLINE with a small open chevron. It is
+      punctuation between the two states. An arrow with any weight to it
+      becomes the third object on the slide and the composition flattens.
+    - The grid is square (3x3) with a gap around 0.6 of the dot diameter,
+      so the dots read as spaced rather than as a block of colour.
+
+  A .glow.accent centred on the ordered grid is the natural pairing: the
+  grid is a shape cluster, which is what the glow exists to light, and
+  putting the light on the ordered half rather than in the middle means the
+  background itself is making the argument. Keep it off the scattered side.
+  On a DARK slide run it near full strength. On a light slide hold it under
+  about 0.18 opacity: a blue glow on white goes grey before it goes bright,
+  so anything stronger reads as a smudge with a visible edge rather than as
+  light, and the ordered dots' own drop shadows are already doing most of
+  the lifting there.
+
+  <div class="scatter-field" style="left:340px; top:420px; width:623px; height:497px;">
+    <div class="dot chaos" style="left:19px;  top:100px;"></div>
+    ...
+  </div>
+  <svg class="flow-arrow" style="left:1090px; top:645px;" width="450" height="46" viewBox="0 0 450 46">
+    <path d="M0 23 H 428"/><path d="M414 10 L 436 23 L 414 36"/>
+  </svg>
+  <div class="order-grid" style="left:1690px; top:488px;">
+    <div class="dot ordered"></div> ... x9
+  </div>
+*/
+.scatter-field { position: absolute; z-index: 1; }
+.order-grid {
+  position: absolute; z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), var(--dot, 86px));
+  gap: var(--dot-gap, 51px);
+}
+.dot { width: var(--dot, 86px); height: var(--dot, 86px); border-radius: 50%; }
+.scatter-field .dot { position: absolute; }
+/* Unlit means FLAT, and this is the one place in the system where a nearly
+   flat fill is correct. Give a chaos dot the off-centre radial that
+   .dot.ordered uses and it turns into a pale glass marble with its own
+   highlight -- a lit object, which is exactly what the ordered side is
+   supposed to be the only one of. Keep it to a whisper of a vertical
+   gradient and keep it close in value to the slide behind it. */
+.dot.chaos { background: linear-gradient(180deg, rgba(15,23,42,0.12), rgba(15,23,42,0.085)); }
+.dot.chaos.on-dark { background: linear-gradient(180deg, rgba(255,255,255,0.105), rgba(255,255,255,0.065)); }
+/* Lit: a sphere, not a filled circle. The off-centre radial origin and the
+   inset top highlight are what separate it from a flat accent disc. */
+.dot.ordered {
+  background: radial-gradient(circle at 32% 26%,
+    var(--orb-blue-lit) 0%, var(--orb-blue-2) 58%, var(--orb-blue-3) 100%);
+  box-shadow:
+    0 16px 30px -12px var(--orb-blue-shadow),
+    inset 0 2px 3px rgba(255,255,255,0.26);
+}
+/* Punctuation between the two states, so it stays a hairline. --light-rule
+   is too faint to survive here (see the wire note in design-system.md). */
+.flow-arrow { position: absolute; z-index: 1; overflow: visible; }
+.flow-arrow path {
+  fill: none; stroke: #C3C9D4; stroke-width: 3;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.flow-arrow.on-dark path { stroke: rgba(255,255,255,0.36); }
+
+/* ---------- band field, lit-corner variant + a stack of glass cards ---------- */
+/*
+  The second dense layout, sibling to the quad grid: title plus a .lede on
+  the left, and on the right a column of 3-5 glass cards standing on a
+  BAND FIELD used as a light source rather than as a corner accent.
+
+  Two things differ from the .band-field the opener uses, and both are
+  what turn a background texture into a light:
+
+  - **It runs the full height of the slide and gets cropped toward the
+    BOTTOM LEFT** (.band-field.lit-corner) instead of fading downward. The
+    brightest bands then read as light entering the top-right corner and
+    falling away across the slide, which is a direction rather than a
+    gradient.
+  - **The bands are STRUCTURE, and .field-blob is the light.** Keep the
+    band ramp flat and dark (roughly luminance 22 up to 88, eased) and let
+    a screened oval supply the brightness. A monotonic left-to-right band
+    ramp can only be a gradient: every row of the field is equally bright,
+    so there is no source. Sixteen bands at 1/32 of the slide width; the
+    opener's five-band 1/16 module is too coarse to read as light.
+  - **The CARDS carry a dark tint, and that is what lets the field be
+    bright.** This is the part that looks backwards and is not. The
+    instinct is to cap the field's brightness so white body copy stays
+    legible on it, and doing that costs the slide the only thing it is
+    for: a capped field reads as a dim strip down the right edge rather
+    than as light. Tint the glass dark instead. A translucent dark panel
+    over a bright field still shows the field through it, just muted, so
+    the card picks up the light while its copy sits on roughly half the
+    luminance. Look at any reference doing this well and the field BETWEEN
+    the cards is visibly brighter than the field inside them.
+
+    That inverts the usual glass tint. `.card` and `.glass-panel` run a
+    light tint from 0.02 at the top to 0.24 at the bottom; a dark tint has
+    to run the other way, heavier at the top and lighter at the bottom, to
+    keep the same lit-at-the-bottom read.
+
+  Values step from near --dark-bg up into the --bar-lit-* family, so the
+  light is the same muted yellow-green the highlighted bar and the orb
+  green already use. Do not reach for a fresh hue here.
+
+  --field-w is 1600px, right-anchored: twenty bands from x960, four of them
+  past the midline. Those four take .band.top-only so they show in the top
+  strip and nowhere else. The dark left column against the lit right IS the
+  composition, and a faded top strip is the only licence it gets -- un-faded
+  bands past centre put structure into the left column and the whole thing
+  collapses into one busy slide.
+
+  The cards are .glass-panel, so the field shows through them blurred and
+  each card picks up the brightness of whatever it stands on. Place the
+  stack INSIDE the field but short of its right edge, leaving the two
+  brightest bands exposed in the margin beside the cards. That strip is
+  the highlight; run the cards over it and the brightest thing on the
+  slide ends up behind body copy.
+*/
+/* A RADIAL mask centred on the field's bottom-left corner, not a diagonal
+   linear one. The linear version is the obvious reading of "cut the
+   bottom-left" and it is wrong: a 215deg gradient runs the whole length of
+   the diagonal, so it dims the bottom-RIGHT to about half alpha as well
+   and the light stops reaching down the right edge. A radial centred on
+   the corner takes out only the corner. */
+.band-field.lit-corner {
+  -webkit-mask-image: radial-gradient(100% 138% at -6% 104%,
+    transparent 0%, rgba(0,0,0,0.18) 34%, rgba(0,0,0,0.62) 58%, #000 84%);
+          mask-image: radial-gradient(100% 138% at -6% 104%,
+    transparent 0%, rgba(0,0,0,0.18) 34%, rgba(0,0,0,0.62) 58%, #000 84%);
+}
+
+/* THE LIGHT IS A BLOB, not the band ramp. Screened over the bands as one
+   wide oval, so brightness falls off in every direction from a centre
+   rather than only leftward.
+
+   This is the distinction that decides whether the field reads as light at
+   all. A monotonic left-to-right ramp across the bands can only ever be a
+   gradient: every row of the field is equally bright, so there is no
+   source, just a wash that happens to be brighter on one side. An oval has
+   a centre and a falloff, which is what a light actually looks like, and it
+   is why the bands underneath should stay comparatively FLAT and dark --
+   their job is the vertical structure the light falls across, not the
+   brightness itself.
+
+   mix-blend-mode: screen rather than an alpha overlay. Screen lightens
+   without flattening what is beneath it, so every band edge survives
+   inside the blob; a translucent light-coloured overlay washes those steps
+   out and takes the bars with them.
+
+   Size it so the oval reaches the top edge and dies just past the bottom
+   of the card stack. Pulling the vertical falloff in tighter than that
+   looks right in the abstract and leaves the LAST card sitting on
+   near-black while the others are lit, which reads as a mistake rather
+   than as falloff. The lower edge of the oval and the bottom-left mask
+   are two halves of one shape; let the mask do the cutting.
+
+   Keep the first two stops OPAQUE. A blob whose alpha starts dropping at
+   a third of the radius lights a small spot and nothing else, and since
+   the cards cover most of the field, a small spot is invisible: all of it
+   ends up behind a dark-tinted panel. The oval has to be genuinely large
+   and genuinely bright, because what the slide shows of it is only the
+   gaps between the cards, the margin beside them, and whatever the cards
+   themselves let through. */
+.band-field .field-blob {
+  position: absolute; inset: 0; pointer-events: none;
+  mix-blend-mode: screen;
+  background: radial-gradient(68% 52% at 58% 42%,
+    rgb(160, 180, 126) 0%,
+    rgb(130, 148, 104) 38%,
+    rgba(92, 106, 76, 0.46) 66%,
+    transparent 88%);
+}
+
+/* Bands that reach PAST the midline, showing only in the top strip.
+   Once .field-blob carries the light, the field is free to run further
+   left than the band ramp alone could justify: the extra bands sit near
+   the slide background and the blob barely reaches them, so they read as
+   the faint outer edge of the light rather than as a second bright half
+   competing with the dark column. Give each its own downward fade and
+   STAGGER the four, soonest on the left, so the group has a shape instead
+   of a hard bottom edge.
+
+   Watch the RAMP FLOOR when you add them. Extending the eased ramp
+   downward to make the new bands "dimmer" walks them to the slide
+   background, where there is nothing left to fade and the four bars simply
+   do not exist -- the markup and the mask both look right. The floor has to
+   stay a visible step above the ground at the top of the slide, where
+   --dark-bg-2 measures about 25; a floor near 34 reads as a faint bar,
+   anything under about 28 reads as nothing.
+
+   This fade is the one thing that lets the field cross centre. Un-faded
+   bands past the midline put structure into the left column and the
+   composition collapses into one busy slide. */
+.band-field .band.top-only {
+  -webkit-mask-image: linear-gradient(180deg,
+    #000 0%, rgba(0,0,0,0.5) calc(var(--tf, 34%) * 0.45), transparent var(--tf, 34%));
+          mask-image: linear-gradient(180deg,
+    #000 0%, rgba(0,0,0,0.5) calc(var(--tf, 34%) * 0.45), transparent var(--tf, 34%));
+}
+
+/* The blue light. Deliberately NOT built from --orb-blue-*: those are deep
+   by design, for a filled disc, and a blue at that value cannot read as a
+   light source. Note also that blue cannot reach the green's luminance at
+   any saturation -- pure blue is luminance 29 -- so a blue blob is
+   necessarily paler and less saturated than the green one at matching
+   brightness. Do not try to correct that by saturating it; it goes purple
+   and stops looking like light. */
+.field-blob.blue {
+  background: radial-gradient(68% 52% at 58% 42%,
+    rgb(123, 160, 220) 0%,
+    rgb(96, 128, 186) 38%,
+    rgba(64, 88, 132, 0.46) 66%,
+    transparent 88%);
+}
+
+/* Corner framing that lands on the lit strip has to flip to DARK ink, and
+   this is easy to ship broken because it looks fine in the markup. A
+   .frame-tag is white at 0.55 opacity, and on a band measuring luminance
+   190 that is invisible -- the tag and the page number simply are not
+   there in the render. Measure the ground under every framing element on a
+   slide with a lit edge rather than trusting the layout. */
+.frame-tag.on-lit { color: rgba(14,20,12,0.80); opacity: 1; }
+
+/* 3-5 equal glass cards dividing a fixed height. flex:1 is what lets the
+   count vary without recomputing anything -- give the stack its box and
+   the cards share it. */
+.card-stack { position: absolute; display: flex; flex-direction: column; gap: 26px; z-index: 2; }
+.card-stack > .glass-panel {
+  flex: 1; position: relative;
+  display: flex; flex-direction: column; justify-content: center;
+  /* The dark tint. Alpha runs DOWN the card so it stays lit at the bottom
+     like every other surface here. At ~0.48 average it halves the field's
+     luminance under the copy while leaving the card visibly tinted by it. */
+  background: linear-gradient(180deg, rgba(9,11,15,0.60), rgba(9,11,15,0.36));
+}
+
+/* The stack divides one fixed height, so the card count sets the card
+   height. Worked through at 1139px of stack with 26px gaps, against a
+   40px title (48px line) plus an 18px gap plus a two-line 28px body
+   (84px) = 150px of content, inside 40px padding:
+
+     3 cards -> 362px each, 282px of content box. Generous; the copy
+                centres with real slack above and below, which is how the
+                reference looks and is not a bug.
+     4 cards -> 265px each, 185px of content box. Snug. The default.
+     5 cards -> 207px each, 127px of content box, which is 23px SHORT of
+                a two-line body. Five cards needs a one-line body, or
+                tighter padding than this file sets. Not wired up here;
+                check the render before shipping five.
+
+   Note what does NOT change with the count: body length. At 28px in an
+   860px measure a card body runs about 61 characters per line, so the
+   25-word ceiling in copy-discipline.md is two lines whatever the count.
+   More cards buys more points, never more room per point. */
+/* The index sits TOP-RIGHT here, not top-left as in the quad grid: the
+   card is a wide band rather than a square, so a number in the far corner
+   reads as a marker on the band instead of a label above the title. */
+.stack-num {
+  position: absolute; top: 32px; right: 40px;
+  font-size: 22px; font-weight: 500; letter-spacing: 1.5px;
+  font-variant-numeric: tabular-nums; color: rgba(255,255,255,0.58);
+}
+/* One step up from .card-title (2.2%) because a card here is a 1080px
+   band rather than a grid cell, and 32px inside it reads as a caption. */
+.stack-title { font-size: 40px; font-weight: 600; color: var(--dark-heading); margin-bottom: 18px; }
+/* Brighter than --dark-body, which is a blue-grey: these cards stand on a
+   yellow-green light, and a cool grey on top of it reads as a colour
+   clash rather than as body copy. */
+.stack-body { font-size: 28px; line-height: 1.5; max-width: 860px; color: rgba(255,255,255,0.82); }
+
+/* ---------- footer bar: closing/contact slide pattern ---------- */
+.footer-bar {
+  position: absolute; bottom: 56px; left: 64px; right: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-bar .icon-row { display: flex; gap: 44px; font-size: 24px; opacity: 0.75; }
+.footer-bar .icon-row span { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ---------- film grain overlay ---------- */
+/* Real grain, from an inline SVG feTurbulence -- there is no way to load
+   a noise image under the artifact CSP, and a CSS gradient cannot make
+   noise. It takes TWO layers, because one blend mode cannot cover the
+   whole tonal range:
+
+     .grain-mid  overlay blend, strong. Bites in the mid-tones and the
+                 highlights, and does nothing at all on near-black --
+                 overlay multiplies there, so 2 x 0.03 x anything stays
+                 0.03.
+     .grain-dark normal blend, very low opacity. This is the one that
+                 puts visible speckle on the dark areas.
+
+   Put both BELOW the text. Grain over type degrades it, and the
+   reference's type is crisp.
+
+   baseFrequency sets the grain size: ~0.38 gives roughly 3px grain at
+   2560 wide, ~0.8 gives a much finer dust. Calibrate .grain-dark against
+   the darkest part of the canvas -- at 0.05 it is invisible there, which
+   is exactly where film grain should be most obvious.
+
+   <svg class="grain-mid" preserveAspectRatio="none">
+     <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.45"
+       numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+     <rect width="100%" height="100%" filter="url(#grain)"/>
+   </svg>
+   <svg class="grain-dark" preserveAspectRatio="none">
+     <rect width="100%" height="100%" filter="url(#grain)"/>
+   </svg>
+*/
+.grain-mid, .grain-dark {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 3;
+}
+.grain-mid  { mix-blend-mode: overlay; opacity: 0.55; }
+.grain-dark { mix-blend-mode: normal;  opacity: 0.11; }
+
+/* ---------- atmospheric cover: one huge lit form + crisp thin arcs ---------- */
+/* The cover language, and it is the opposite of the rest of the deck: no
+   cards, no diagram, one enormous soft form filling most of the canvas
+   with the type sitting quietly in a dark corner.
+
+   .lit-form is a circle far larger than the slide, most of it off-canvas,
+   so only an arc of its edge crosses the frame -- that arc is the
+   terminator between the lit side and the dark. Its own blur is what
+   makes the terminator soft. Stack colour into it as several
+   radial-gradients in absolute px, positioned in the circle's local
+   coordinates (slide X,Y maps to local X-left, Y-top).
+
+   .thin-arc is the counterpoint: circles of the same enormous scale with
+   a 2px stroke and NO blur. That contrast between one soft mass and a
+   couple of hairline arcs is most of why the reference reads as
+   expensive; drop the arcs and it is just a gradient.
+*/
+.lit-form { position: absolute; border-radius: 50%; z-index: 1; }
+.thin-arc {
+  position: absolute; border-radius: 50%; z-index: 2;
+  border: 2px solid rgba(255,255,255,0.22);
+  pointer-events: none;
+}
+
+/* ---------- the signature soft glow ---------- */
+/* Place ONE of these behind a diagram/shape cluster, never behind body text. */
+.glow {
+  position: absolute; border-radius: 50%;
+  filter: blur(90px); pointer-events: none; z-index: 0;
+}
+.glow.accent { background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); }
+
+/* ---------- layout helpers ---------- */
+.grid { position: absolute; display: grid; gap: 24px; }
+.col { display: flex; flex-direction: column; }
+.row { display: flex; flex-direction: row; }
+
+/*
+  Text elements that must remain real, editable text in the final .pptx
+  (titles, subtitles, stat numbers, card copy, labels -- basically anything
+  a human would want to click into and retype) need data-overlay="<unique-id>".
+  See references/design-system.md for the full convention and worked example.
+*/
+[data-overlay] { }

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="deck-system.css">
+<style>
+  /* Lit band field + glass card stack, dark. Sibling of 07: same
+     title-plus-lede left column, a different right half.
+
+     The field is exactly the right half (--field-w 1280px, right-anchored)
+     so it stops on the midline. The dark left half against the lit right
+     half IS the composition -- let the field cross the middle and the
+     slide loses its structure.
+
+     The card stack sits inside the field but short of its right edge, so
+     the two brightest bands stay exposed in the 160px margin beside the
+     cards. That strip is the highlight. Running the cards over it would
+     put the brightest thing on the slide behind body copy.
+
+       cards box   1320 -> 2400, 138 -> 1277  (matches the reference's
+                   9.6% / 88.7% verticals)
+       title       same 160/160 origin as slide 07 */
+  .claim { position: absolute; top: 160px; left: 160px; width: 1100px; z-index: 2; }
+  .claim .lede { margin-top: 56px; max-width: 820px; }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="band-field lit-corner" style="--field-w: 1600px;">
+      <div class="band top-only" style="--bc: 32,36,27; --tf: 20%;"></div>
+      <div class="band top-only" style="--bc: 34,38,29; --tf: 27%;"></div>
+      <div class="band top-only" style="--bc: 37,41,31; --tf: 34%;"></div>
+      <div class="band top-only" style="--bc: 39,44,33; --tf: 41%;"></div>
+      <div class="band" style="--bc: 42,47,36;"></div>
+      <div class="band" style="--bc: 45,50,38;"></div>
+      <div class="band" style="--bc: 48,54,41;"></div>
+      <div class="band" style="--bc: 51,57,44;"></div>
+      <div class="band" style="--bc: 55,61,46;"></div>
+      <div class="band" style="--bc: 58,65,49;"></div>
+      <div class="band" style="--bc: 62,68,52;"></div>
+      <div class="band" style="--bc: 65,72,55;"></div>
+      <div class="band" style="--bc: 69,76,58;"></div>
+      <div class="band" style="--bc: 72,80,61;"></div>
+      <div class="band" style="--bc: 76,85,64;"></div>
+      <div class="band" style="--bc: 80,89,68;"></div>
+      <div class="band" style="--bc: 84,93,71;"></div>
+      <div class="band" style="--bc: 88,97,74;"></div>
+      <div class="band" style="--bc: 91,102,77;"></div>
+      <div class="band" style="--bc: 95,106,81;"></div>
+      <div class="field-blob"></div>
+    </div>
+
+    <div class="frame-logo" data-overlay="s8-logo">Nexthink</div>
+    <div class="frame-tag on-lit" data-overlay="s8-tag">How it works</div>
+
+    <div class="claim">
+      <div class="title" data-overlay="s8-title">The hard part happens<br>before you press enter.</div>
+      <div class="lede dark" data-overlay="s8-lede">
+        Everything between a question and a trustworthy answer now runs
+        inside one request.
+      </div>
+    </div>
+
+    <div class="footer-bar" style="left:160px; right:160px;">
+      <div class="frame-tag" style="position:static; top:auto; right:auto;"
+           data-overlay="s8-foot-l">Data platform review</div>
+      <div class="frame-tag on-lit" style="position:static; top:auto; right:auto;"
+           data-overlay="s8-foot-r">08</div>
+    </div>
+
+    <div class="card-stack" style="left:1320px; top:138px; width:1080px; height:1139px;">
+      <div class="glass-panel">
+        <div class="stack-num" data-overlay="s8-n1">01</div>
+        <div class="stack-title" data-overlay="s8-t1">The schema is live</div>
+        <div class="stack-body" data-overlay="s8-b1">
+          A renamed column never reaches the query, because the planner reads the live catalogue.
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <div class="stack-num" data-overlay="s8-n2">02</div>
+        <div class="stack-title" data-overlay="s8-t2">Joins come from the model</div>
+        <div class="stack-body" data-overlay="s8-b2">
+          One declared relationship per table pair, taken from the model that every query shares.
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <div class="stack-num" data-overlay="s8-n3">03</div>
+        <div class="stack-title" data-overlay="s8-t3">Every answer is checked twice</div>
+        <div class="stack-body" data-overlay="s8-b3">
+          A narrower second query runs behind each answer, which turns any mismatch into a stated limit.
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <div class="stack-num" data-overlay="s8-n4">04</div>
+        <div class="stack-title" data-overlay="s8-t4">Cost has a ceiling</div>
+        <div class="stack-body" data-overlay="s8-b4">
+          A question that would scan more than a terabyte gets refused with the cheaper query it should have been.
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

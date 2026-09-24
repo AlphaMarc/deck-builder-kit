@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  .hero { position: absolute; top: 50%; left: 64px; width: 900px; transform: translateY(-50%); }
+  .hero .title { margin-bottom: 24px; }
+  .hero .subtitle { margin-bottom: 56px; }
+
+  /* the "big number, label riding beside it" pattern from the reference
+     snapshot slide -- note this is NOT .stat-label under the number, the
+     label sits to the RIGHT at roughly the number's baseline. */
+  .side-stat { display: flex; align-items: baseline; gap: 16px; margin-bottom: 40px; }
+  .side-stat .stat-label { margin-top: 0; max-width: 140px; line-height: 1.3; }
+
+  .chart { position: absolute; top: 260px; left: 1180px; width: 1320px; height: 680px; display: flex; align-items: flex-end; gap: 56px; padding: 0 40px; }
+  .bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+  .bar-col .bar { width: 100%; }
+  .glow-bar { width: 260px; height: 500px; top: 140px; left: 1660px; }
+  .now-pill { position: absolute; top: -56px; left: 50%; transform: translateX(-50%); }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="frame-logo" data-overlay="ex3-logo">Acme</div>
+    <div class="frame-tag" data-overlay="ex3-tag">Q3 2026</div>
+
+    <div class="glow glow-bar accent"></div>
+
+    <div class="hero">
+      <div class="eyebrow" data-overlay="ex3-eyebrow">Example layout</div>
+      <div class="title" data-overlay="ex3-title">A worked bar-chart slide</div>
+      <div class="subtitle dark" data-overlay="ex3-subtitle">
+        Recessed dark wells with the value baked inside near the base.
+        The one bar that matters trades the dark fill for a lit ramp and
+        takes a floating "Now" badge above it.
+      </div>
+
+      <div class="side-stat">
+        <div class="stat xl" data-overlay="ex3-stat1">186</div>
+        <div class="stat-label" data-overlay="ex3-stat1-label">active workflows</div>
+      </div>
+      <div class="side-stat">
+        <div class="stat xl" data-overlay="ex3-stat2">96.2%</div>
+        <div class="stat-label" data-overlay="ex3-stat2-label">success rate</div>
+      </div>
+    </div>
+
+    <div class="chart">
+      <div class="bar-col" style="height: 45%;">
+        <div class="bar neutral-dark" style="height: 100%;">
+          <div class="bar-value-inside" data-overlay="ex3-w1-value">4K</div>
+        </div>
+        <div class="bar-axis-label" data-overlay="ex3-w1">Week 1</div>
+      </div>
+      <div class="bar-col" style="height: 68%;">
+        <div class="bar neutral-dark" style="height: 100%;">
+          <div class="bar-value-inside" data-overlay="ex3-w2-value">8K</div>
+        </div>
+        <div class="bar-axis-label" data-overlay="ex3-w2">Week 2</div>
+      </div>
+      <div class="bar-col" style="height: 92%;">
+        <span class="pill neutral-light now-pill"><span data-overlay="ex3-now">Now</span></span>
+        <div class="bar accent" style="height: 100%;">
+          <div class="bar-value-inside" data-overlay="ex3-w3-value">12K</div>
+        </div>
+        <div class="bar-axis-label" data-overlay="ex3-w3">Week 3</div>
+      </div>
+      <div class="bar-col" style="height: 45%;">
+        <div class="bar neutral-dark" style="height: 100%;">
+          <div class="bar-value-inside" data-overlay="ex3-w4-value">4K</div>
+        </div>
+        <div class="bar-axis-label" data-overlay="ex3-w4">Week 4</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

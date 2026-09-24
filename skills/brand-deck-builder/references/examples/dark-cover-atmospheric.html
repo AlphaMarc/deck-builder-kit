@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  /* near-black, very slightly green, as the reference's dark side */
+  .slide.cover { background: #060A09; }
+
+  /* ------------------------------------------------------------------
+     Geometry fitted to the reference (its slide area was 1460x816, so
+     x1.753). Three points off each curve, solved for centre and radius:
+
+     All three circles are CONCENTRIC on (2903, 0), off the right edge at
+     the top, and differ only in radius:
+
+       lit form / terminator   r 1799   left edge crosses x 1104 at y 0
+       inner arc               r 1737   left edge crosses x 1166
+       mid arc                 r 1224   left edge crosses x 1679
+
+     Each is far bigger than the slide, so only an arc of it crosses the
+     frame. Colour is stacked into the lit form as radial-gradients in
+     ITS local coordinates: slide (X,Y) maps to local (X - 1104, Y + 1799).
+     ------------------------------------------------------------------ */
+  .lit-form {
+    left: 1104px; top: -1799px; width: 3598px; height: 3598px;
+    background-image:
+      /* the form's own shading: it falls away toward the lower left,
+         inside the terminator, before brightening again to the right */
+      radial-gradient(820px 820px at 330px 3110px, rgba(20,36,34,0.92), rgba(20,36,34,0) 100%),
+      /* The white is a CRESCENT, not a blob. It is concentric with the
+         form itself, so its bright band sits at a constant radius and so
+         hugs the terminator all the way down -- concave, curving around
+         the dark side. A round radial blob here reads convex, which is
+         what was wrong. */
+      radial-gradient(circle 1799px at 1799px 1799px,
+        rgba(248,251,249,0) 64%,
+        rgba(248,251,249,0.35) 74%,
+        rgba(250,252,251,0.98) 88%,
+        rgba(250,252,251,0.95) 96%,
+        rgba(250,252,251,0) 100%),
+      /* teal bloom, upper right of the visible arc */
+      radial-gradient(900px 900px at 1175px 2063px, rgba(134,189,176,0.96), rgba(134,189,176,0) 100%),
+      /* cool pale grey filling the lower interior */
+      radial-gradient(1300px 1300px at 1000px 2900px, #CFDAD6, rgba(207,218,214,0) 100%),
+      /* the form's own body and its rim falloff */
+      radial-gradient(circle 1799px at 1799px 1799px,
+        rgba(218,229,225,0.88) 0%,
+        rgba(214,226,222,0.88) 82%,
+        rgba(140,164,158,0.50) 93%,
+        rgba(28,42,40,0.14) 98%,
+        rgba(6,10,9,0) 100%);
+    filter: blur(36px);
+  }
+
+  /* green bleeding into the dark side, left of the terminator. z-index 0
+     puts it under the form, so the form masks it to the dark region. */
+  .dark-side-green {
+    position: absolute; left: 280px; top: -260px; width: 1800px; height: 1800px;
+    z-index: 0; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(56,112,99,0.36), rgba(56,112,99,0) 76%);
+    filter: blur(70px);
+  }
+
+  /* concentric with the lit form, not independently placed */
+  .arc-inner { left: 1166px; top: -1737px; width: 3474px; height: 3474px; border-color: rgba(255,255,255,0.16); }
+  .arc-mid   { left: 1679px; top: -1224px; width: 2448px; height: 2448px; border-color: rgba(255,255,255,0.45); }
+
+  /* ------------------------------------------------------------------
+     Type. The reference sets its title LIGHT, not bold -- a departure
+     from the deck's 800-weight titles, and most of why the cover reads
+     as calm rather than loud.
+     ------------------------------------------------------------------ */
+  .cover-logo { position: absolute; top: 170px; left: 190px; z-index: 5; font-weight: 700; font-size: 30px; letter-spacing: 0.2px; }
+  /* position only -- the type comes from the system's .title.xl */
+  .cover-title { position: absolute; top: 828px; left: 190px; width: 1500px; z-index: 5; }
+  .cover-sub { position: absolute; top: 1196px; left: 190px; z-index: 5; font-weight: 300; font-size: 52px; color: rgba(255,255,255,0.72); }
+  /* dark, not white: this corner sits over the pale side of the form */
+  .cover-by  { position: absolute; top: 1218px; right: 96px; z-index: 5; font-size: 24px; color: rgba(16,26,24,0.62); }
+</style>
+</head>
+<body>
+  <div class="slide dark cover">
+    <div class="dark-side-green"></div>
+    <div class="lit-form"></div>
+
+    <div class="thin-arc arc-inner"></div>
+    <div class="thin-arc arc-mid"></div>
+
+    <svg class="grain-mid" preserveAspectRatio="none">
+      <filter id="grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.38" numOctaves="3" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#grain)"/>
+    </svg>
+    <svg class="grain-dark" preserveAspectRatio="none">
+      <rect width="100%" height="100%" filter="url(#grain)"/>
+    </svg>
+
+    <div class="cover-logo" data-overlay="cv-logo">Nexthink</div>
+
+    <div class="cover-title"><div class="title xl" data-overlay="cv-title">SWOT &amp; Strategy<br>Frameworks:</div></div>
+    <div class="cover-sub" data-overlay="cv-sub">Business planning slides</div>
+    <div class="cover-by" data-overlay="cv-by">March 202X</div>
+  </div>
+</body>
+</html>

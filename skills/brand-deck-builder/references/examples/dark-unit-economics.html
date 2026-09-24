@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  .hero { position: absolute; top: 50%; left: 64px; width: 480px; transform: translateY(-50%); }
+  .hero .title { margin-bottom: 16px; }
+
+  /* bento B proportions: columns 1.19:1, top block : bottom strip 1.92:1 */
+  .grid-zone { position: absolute; top: 210px; left: 700px; width: 1700px; height: 994px; display: grid; grid-template-columns: 910px 766px; grid-template-rows: 638px 332px; gap: 24px; }
+  .donut-card { display: flex; flex-direction: column; }
+  .donut-card .donut-wrap { margin: 24px auto 0; }
+
+  .side-card { display: flex; flex-direction: row; justify-content: space-between; gap: 24px; }
+  .side-card .side-stat { flex: 0 0 auto; }
+  .side-card .card-list { flex: 1; padding-top: 44px; }
+
+  .bottom-row { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .bottom-row .card { display: flex; flex-direction: column; gap: 16px; }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="frame-logo" data-overlay="ue-logo">Nexthink</div>
+    <div class="frame-tag" data-overlay="ue-tag">Unit economics</div>
+
+    <div class="hero">
+      <div class="eyebrow" data-overlay="ue-eyebrow">Example layout</div>
+      <div class="title" data-overlay="ue-title">A worked dashboard-with-donut slide</div>
+      <div class="subtitle dark" data-overlay="ue-subtitle">
+        Demonstrates robust early-stage economics: an SVG ring chart, and
+        mixed-color stats where only the "x" or "+" carries the accent.
+      </div>
+    </div>
+
+    <div class="grid-zone">
+      <div class="card dark donut-card">
+        <div class="card-title" data-overlay="ue-donut-title">Payback period</div>
+        <div class="donut-wrap">
+          <svg viewBox="0 0 200 200" width="280" height="280">
+            <circle class="donut-track" cx="100" cy="100" r="80"></circle>
+            <circle class="donut-value accent" cx="100" cy="100" r="80" style="--donut-offset: 377;"></circle>
+          </svg>
+          <div class="donut-center">
+            <div class="stat" data-overlay="ue-donut-value">4.6</div>
+            <div class="stat-label" data-overlay="ue-donut-label">months</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card dark side-card">
+        <div class="side-stat">
+          <div class="card-title" data-overlay="ue-ltv-title">LTV / CAC</div>
+          <div class="stat" style="margin-top: 32px;"><span data-overlay="ue-ltv-value">10.8</span><span class="stat-accent-part" data-overlay="ue-ltv-suffix">x</span></div>
+        </div>
+        <ul class="card-list">
+          <li><span data-overlay="ue-ltv-b1">Strong across all metrics</span></li>
+          <li><span data-overlay="ue-ltv-b2">High cross-sell rate</span></li>
+          <li><span data-overlay="ue-ltv-b3">Stable, predictable revenue driver</span></li>
+        </ul>
+      </div>
+
+      <div class="bottom-row">
+        <div class="card dark">
+          <div class="card-title" data-overlay="ue-cac-title">Customer acquisition cost</div>
+          <div class="stat" style="font-size: 74px;" data-overlay="ue-cac-value">$1,150</div>
+          <div class="card-body dark" data-overlay="ue-cac-note">Trending down as referrals scale.</div>
+        </div>
+        <div class="card dark">
+          <div class="card-title" data-overlay="ue-arpa-title">ARPA</div>
+          <div class="stat" style="font-size: 74px;" data-overlay="ue-arpa-value">$690<span style="font-size: 30px; opacity: 0.6; font-weight: 500;">/mo</span></div>
+          <div class="card-body dark" data-overlay="ue-arpa-note">Growth stalled at +5% YoY.</div>
+        </div>
+        <div class="card dark">
+          <div class="card-title" data-overlay="ue-margin-title">Gross margin</div>
+          <div class="stat" style="font-size: 74px;"><span class="stat-accent-part" data-overlay="ue-margin-sign">+</span><span data-overlay="ue-margin-value">83%</span></div>
+          <div class="card-body dark" data-overlay="ue-margin-note">Best-in-class for the category.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="deck-system.css">
+<style>
+  /* Split lede + quad grid, light.
+
+     The title's cap top and the grid's top rule share one line at 12.7%
+     of height (184px), so the two columns start together:
+
+       title cap top   12.7% of 1440 = 183  ->  box top 160 at .title
+       grid box        184 -> 1304, 1120 square
+
+     The lede is NOT positioned. It hangs off the bottom of the title with
+     a fixed margin, inside the same block, so it stays put when the title
+     goes to two lines or four. Positioning it absolutely is the tempting
+     version and it silently breaks the first time the copy changes: the
+     gap either opens up or the lede lands on top of the last title line.
+
+     The lede's measure (820px) is deliberately shorter than the title's
+     (960px) -- see the .lede note in deck-system.css. */
+  .claim { position: absolute; top: 160px; left: 160px; width: 960px; z-index: 2; }
+  .claim .lede { margin-top: 56px; max-width: 820px; }
+</style>
+</head>
+<body>
+  <div class="slide light">
+    <div class="frame-logo" data-overlay="s7-logo">Nexthink</div>
+    <div class="frame-tag" data-overlay="s7-tag">The problem</div>
+
+    <div class="claim">
+      <div class="title" data-overlay="s7-title">Every question about<br>your data still needs<br>an engineer.</div>
+      <div class="lede light" data-overlay="s7-lede">
+        The hard part is upstream of the database, in the work that decides
+        what an answer even means.
+      </div>
+    </div>
+
+    <div class="footer-bar" style="left:160px; right:160px;">
+      <div class="frame-tag" style="position:static; top:auto; right:auto;"
+           data-overlay="s7-foot-l">Data platform review</div>
+      <div class="frame-tag" style="position:static; top:auto; right:auto;"
+           data-overlay="s7-foot-r">07</div>
+    </div>
+
+    <div class="quad-grid" style="left:1280px; top:184px; width:1120px; height:1120px;">
+      <div class="quad plain">
+        <div class="quad-num" data-overlay="s7-n1">01</div>
+        <div class="quad-text">
+          <div class="quad-title" data-overlay="s7-t1">Schema in four places</div>
+          <div class="quad-body" data-overlay="s7-b1">
+            Table definitions are in the warehouse, the dbt repo, a
+            Confluence page and one analyst's notebook.
+          </div>
+        </div>
+      </div>
+
+      <div class="quad on-tex tex-streak">
+        <div class="quad-num" data-overlay="s7-n2">02</div>
+        <div class="quad-text">
+          <div class="quad-title" data-overlay="s7-t2">Joins nobody wrote down</div>
+          <div class="quad-body" data-overlay="s7-b2">
+            The rule that connects orders to customers is correct in three
+            queries and wrong in nine others.
+          </div>
+        </div>
+      </div>
+
+      <div class="quad on-tex tex-fins">
+        <div class="quad-num" data-overlay="s7-n3">03</div>
+        <div class="quad-text">
+          <div class="quad-title" data-overlay="s7-t3">No one verifies the result</div>
+          <div class="quad-body" data-overlay="s7-b3">
+            A query returns rows whether the logic is right or not, which
+            leaves a wrong number looking exactly like a right one.
+          </div>
+        </div>
+      </div>
+
+      <div class="quad plain">
+        <div class="quad-num" data-overlay="s7-n4">04</div>
+        <div class="quad-text">
+          <div class="quad-title" data-overlay="s7-t4">What asking costs</div>
+          <div class="quad-body" data-overlay="s7-b4">
+            Two days of analyst time per question is enough to keep most
+            of them from ever being asked.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck-system.css">
+<style>
+  /* With no footer bar anchoring the bottom, the content block is centred
+     in the canvas rather than pinned to the reference's 12% / 89% rhythm. */
+  .hero-eyebrow { position: absolute; top: 240px; left: 160px; z-index: 2; }
+  .hero-title { position: absolute; top: 372px; left: 160px; width: 1900px; z-index: 2; }
+
+  .lede { position: absolute; top: 740px; left: 160px; width: 1040px; z-index: 2; }
+
+  .three-up { position: absolute; top: 960px; left: 160px; width: 1620px; z-index: 2; }
+  .three-up .col-label { font-size: 30px; font-weight: 600; margin-bottom: 18px; }
+  .three-up .col-body { font-size: 28px; line-height: 1.55; color: var(--dark-body); }
+</style>
+</head>
+<body>
+  <div class="slide dark">
+    <div class="band-field">
+      <div class="band" style="--bc: 23,30,42;"></div>
+      <div class="band" style="--bc: 28,38,54;"></div>
+      <div class="band" style="--bc: 34,47,68;"></div>
+      <div class="band" style="--bc: 41,58,84;"></div>
+      <div class="band" style="--bc: 49,70,103;"></div>
+    </div>
+
+    <div class="frame-tag">Example layout</div>
+
+    <div class="hero-eyebrow">
+      <div class="eyebrow">Example layout</div>
+    </div>
+
+    <div class="hero-title">
+      <div class="title xl">A worked band-field<br>opener.</div>
+    </div>
+
+    <div class="lede">
+      <div class="subtitle dark" style="max-width: 1040px;">
+        A section opener carrying one claim and three ways into it. The band
+        field in the corner replaces the round glow as the background.
+      </div>
+    </div>
+
+    <div class="three-up">
+      <div class="divider-list cols">
+        <div class="divider-item">
+          <div class="col-label">Service desk</div>
+          <div class="col-body">
+            Ticket deflection measured against the whole live queue.
+          </div>
+        </div>
+        <div class="divider-item">
+          <div class="col-label">Endpoint operations</div>
+          <div class="col-body">
+            Device health signals feeding remediation that runs without a
+            human.
+          </div>
+        </div>
+        <div class="divider-item">
+          <div class="col-label">Digital workplace</div>
+          <div class="col-body">
+            Employee sentiment read alongside what the telemetry shows.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
