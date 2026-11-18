@@ -82,10 +82,17 @@ SKILL.md for how the two phases fit together.
    eyeballing it, for the same reason a lede is attached by margin.
 
 2. **Minimal corner framing, always.** A small logo top-left, and
-   optionally a small metadata tag top-right (date, section label, page
-   number). Keep both genuinely small and quiet — they orient the viewer,
-   they are never a design element competing for attention. `.frame-logo`
-   / `.frame-tag`.
+   optionally a small metadata tag top-right (date, section label). Keep
+   both genuinely small and quiet — they orient the viewer, they are never
+   a design element competing for attention. `.frame-logo` / `.frame-tag`.
+
+   **Slide numbers are automatic: never type one into a slide.** Every
+   script adds a `.frame-num` bottom-right at render time (see
+   `scripts/slide_number.mjs`), numbered from the sorted file order: the
+   title slide has none, the second file shows 2. A typed number goes stale
+   on the first reorder and shows twice next to the automatic one. Keep the
+   bottom-right corner (about 140x90px) clear of content. To drop the number
+   from one slide, put `data-no-number` on its `.slide` div.
 
 3. **The glow is a light source, not a decoration.** One large, heavily
    blurred radial gradient blob (`.glow`), placed behind a cluster of shapes

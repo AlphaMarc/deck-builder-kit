@@ -403,6 +403,23 @@ of them has to be rewritten to carry its causation differently.
 > Good: keep two, and turn the weakest into a plain statement, e.g. "Reviewers
 > now know which number they are moving."
 
+**The chained repeat (anadiplosis).** One sentence ends on a noun and the
+next sentence opens on the same noun, so the second sentence exists only to
+pick the word up again. It reads as a template because a person would join the
+two into one clause.
+
+> Bad: "Staff pick a supplier from a list. The list comes from the contract
+> register."
+> Good: "Staff pick a supplier from a list that the contract register fills."
+
+**The stilted `of the` chain from over-applied plain English.** Simplified
+English (ASD-STE100 and similar) discourages ambiguous noun stacks, and the
+over-correction is `the X of the Y` everywhere, including where a possessive
+is the natural, unambiguous form. Two `of the` links in one line is the tell.
+
+> Bad: "The budget of the team of the customer."
+> Good: "The customer's team budget." or "Each customer team's budget."
+
 ### Words and phrases to avoid in decks
 
 **Named by the reviewer, never use these:**
@@ -555,3 +572,15 @@ A non-empty result is not automatically a defect. Read each hit and decide.
 But every hit needs a reason to survive, and "it sounded good" is not one.
 Also count words per element against the table in §1; the scanner cannot see
 density.
+
+**Idioms and figurative verbs in titles (Simplified Technical English pass).**
+A title built on an idiom (`on track`, `set the bar`, `the next climb`, `keeps
+pace`, `on top`, `rests on`, `in step with`, `on day one`, `for free`) reads
+well to a native speaker and costs a global audience a translation step. It
+also tends to hide the actual number or owner. Say the literal thing.
+
+> Bad: "Three changes put the warehouse move on track for spring"
+> Good: "Three changes let us finish the warehouse move in April"
+
+> Bad: "Returns are the next climb: 4% today, 2% by June"
+> Good: "We target a 2% return rate by June"

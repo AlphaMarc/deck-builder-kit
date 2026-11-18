@@ -10,6 +10,7 @@ import { chromium } from "playwright";
 import { readdir, mkdir } from "node:fs/promises";
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
+import { slideNumber, injectIntoPage } from "./slide_number.mjs";
 
 function parseArgs(argv) {
   // scale defaults to 2: at scale 1 a 1px CSS hairline is one pixel in a
@@ -103,6 +104,8 @@ async function main() {
     const base = path.basename(file, ".html");
     const htmlPath = path.resolve(htmlDir, file);
     await page.goto("file://" + htmlPath);
+    // before overlay extraction, so the number becomes an editable text box
+    await injectIntoPage(page, slideNumber(files.indexOf(file)));
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(150); // let blur/gradient paints settle
 

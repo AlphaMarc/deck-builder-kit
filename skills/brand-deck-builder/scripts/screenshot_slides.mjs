@@ -18,6 +18,7 @@
 import { chromium } from "playwright";
 import { readdir, mkdir } from "node:fs/promises";
 import path from "node:path";
+import { slideNumber, injectIntoPage } from "./slide_number.mjs";
 
 function parseArgs(argv) {
   const args = { scale: 0.5, only: null };
@@ -39,10 +40,10 @@ if (!args.htmlDir || !args.outDir) {
 
 await mkdir(args.outDir, { recursive: true });
 
-const files = (await readdir(args.htmlDir))
-  .filter((f) => f.endsWith(".html"))
-  .filter((f) => !args.only || f.includes(args.only))
-  .sort();
+// numbers come from the position in the FULL list, so --only still shoots a
+// slide with the number it has in the deck
+const allFiles = (await readdir(args.htmlDir)).filter((f) => f.endsWith(".html")).sort();
+const files = allFiles.filter((f) => !args.only || f.includes(args.only));
 
 if (!files.length) {
   console.error(`no .html files in ${args.htmlDir}${args.only ? ` matching "${args.only}"` : ""}`);
@@ -57,6 +58,7 @@ const page = await browser.newPage({
 
 for (const f of files) {
   await page.goto("file://" + path.resolve(args.htmlDir, f));
+  await injectIntoPage(page, slideNumber(allFiles.indexOf(f)));
   // let webfonts settle before shooting, or type metrics shift and every
   // line-wrap judgement made from the screenshot is wrong
   await page.evaluate(() => document.fonts.ready);

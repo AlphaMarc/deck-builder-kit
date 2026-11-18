@@ -27,6 +27,7 @@
 
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { slideNumber, injectIntoHtml } from "./slide_number.mjs";
 
 // Local images have to travel INSIDE the document, as data URIs.
 //
@@ -124,6 +125,9 @@ async function main() {
       console.warn(`WARNING: ${file} has no <link ...deck-system.css> tag to inline -- its styles may not appear in the preview.`);
     }
     let doc = html.replace(linkPattern, `<style>${deckCss}</style>`);
+    const numbered = injectIntoHtml(doc, slideNumber(files.indexOf(file)));
+    if (!numbered.ok) console.warn(`WARNING: ${file} has no </div></body> to close the .slide div -- no slide number added.`);
+    doc = numbered.html;
     const res = await inlineAssets(doc, path.resolve(htmlDir), file);
     inlined += res.count;
     missing.push(...res.missing);

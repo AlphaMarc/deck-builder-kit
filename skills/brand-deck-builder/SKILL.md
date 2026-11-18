@@ -249,6 +249,14 @@ component, light or dark) rather than a content problem.
    ellipse+shadow trick) wherever they fit, even inside a layout you're
    composing from scratch.
 
+   **Slide numbers come for free.** `screenshot_slides.mjs`,
+   `build_preview.mjs` and `render_slides.mjs` all add a small number in the
+   bottom-right corner of every slide except the first (the title slide), from
+   the sorted file order. So the second file shows 2, and the printed number
+   always matches "slide N" in the copy. Do not write page numbers into the
+   HTML or keep one from an example's footer; renumber by renaming files
+   instead. Details in `scripts/slide_number.mjs`.
+
 4. **Look at every slide yourself before showing anyone.** Screenshot them
    with their text visible and read the images:
    ```bash
