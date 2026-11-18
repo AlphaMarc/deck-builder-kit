@@ -18,15 +18,17 @@ deck builder knows how to draw.
 - **[`skills/slide-copy-review/`](skills/slide-copy-review/)** — the
   line-by-line copy review that gates every deck before `.pptx`
   conversion.
+- **[`skills/humanizer/`](skills/humanizer/)** — a third-party skill
+  (v2.11.1, © 2025 Siqi Chen, MIT, see its [`LICENSE`](skills/humanizer/LICENSE))
+  that strips AI-writing patterns from prose, based on Wikipedia's
+  "Signs of AI writing". Included unchanged because the other skills
+  call it for an extra copy pass.
 - **[`template-library/`](template-library/)** — one real slide per
   layout the deck builder can draw (light and dark variants where both
   read well), plus screenshots and a rendered preview deck. See its own
   README for the layout catalogue and how the library is extended.
 
-`brand-deck-builder` calls the other three by name, so install all four.
-The skills also call `humanizer`, a third-party skill that is not
-included here. Without it, the one extra copy pass that uses it is
-skipped; `slide-copy-review` still reads every line.
+The skills call each other by name, so install all five.
 
 ## Installing the skills
 
@@ -35,6 +37,13 @@ directory:
 
 ```bash
 cp -R skills/* ~/.claude/skills/
+```
+
+If you already have `humanizer` installed, skip it to keep your own
+version:
+
+```bash
+cp -R skills/brand-deck-builder skills/presentation-storytelling skills/internal-comms-writing-style skills/slide-copy-review ~/.claude/skills/
 ```
 
 Then set up its build environment (Playwright for screenshots,
